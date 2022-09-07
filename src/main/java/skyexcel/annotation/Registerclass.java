@@ -1,4 +1,4 @@
-package annotation;
+package skyexcel.annotation;
 
 
 import org.bukkit.Bukkit;

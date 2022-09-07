@@ -1,4 +1,4 @@
-package data;
+package skyexcel.data.file;
 
 import org.bukkit.configuration.ConfigurationSection;
 

@@ -1,7 +1,7 @@
-package command;
+package skyexcel.command;
 
 
-import annotation.Adjust;
+import skyexcel.annotation.Adjust;
 import org.bukkit.entity.Player;
 
 @Adjust(command = "abcd")

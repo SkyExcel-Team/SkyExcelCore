@@ -1,4 +1,4 @@
-package data;
+package skyexcel.data;
 
 import org.bukkit.event.Listener;
 

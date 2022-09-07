@@ -1,4 +1,4 @@
-package customer;
+package skyexcel.customer;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

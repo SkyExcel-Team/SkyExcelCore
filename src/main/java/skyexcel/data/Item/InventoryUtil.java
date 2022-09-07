@@ -1,4 +1,4 @@
-package data;
+package skyexcel.data.Item;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

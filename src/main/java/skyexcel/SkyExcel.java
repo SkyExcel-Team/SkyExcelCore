@@ -1,8 +1,9 @@
+package skyexcel;
 
-import annotation.Registerclass;
-import command.abcd;
-import command.test;
-import customer.Address;
+import skyexcel.annotation.Registerclass;
+import skyexcel.command.abcd;
+import skyexcel.command.test;
+import skyexcel.customer.Address;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;

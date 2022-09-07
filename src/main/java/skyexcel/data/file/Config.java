@@ -1,6 +1,5 @@
-package data;
+package skyexcel.data.file;
 
-import data.Item.NBTData;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -14,6 +13,7 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
+import skyexcel.data.Item.NBTData;
 
 import java.io.File;
 import java.io.IOException;
