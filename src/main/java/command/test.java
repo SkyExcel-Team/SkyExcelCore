@@ -1,6 +1,7 @@
 package command;
 
-import me.github.skyexcelcore.annotation.Adjust;
+
+import annotation.Adjust;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
