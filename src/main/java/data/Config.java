@@ -1,5 +1,6 @@
 package data;
 
+import data.Item.NBTData;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -284,10 +285,14 @@ public class Config {
         if (item.hasItemMeta()) {
             slot.set("Item.Meta.display-name", meta.getDisplayName());
             slot.set("Item.Meta.lore", meta.getLore());
-
+            NBTData nbtData = new NBTData(plugin);
+            for (String key : nbtData.getAllKeys(item)) {
+                slot.set("Item.Meta.Data." + key, nbtData.getNBT(item, key));
+            }
             if (item.getItemMeta().hasCustomModelData()) {
                 slot.set("CustomModelData", meta.getCustomModelData());
             }
+
         }
         slot.set("Item.data", item.getDurability());
 
@@ -465,7 +470,6 @@ public class Config {
             }
         }
     }
-
 
 
     public File[] getFileList() {
