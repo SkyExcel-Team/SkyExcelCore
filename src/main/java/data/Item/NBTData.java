@@ -24,7 +24,7 @@ public class NBTData {
     public NBTData(Plugin plugin) {
         Objects.requireNonNull(plugin, "JeffLib hasn't been initialized.");
         this.plugin = plugin;
-
+        System.out.println("test");
     }
 
     public @Nullable String getNBT(@NotNull ItemStack item, String key) {
