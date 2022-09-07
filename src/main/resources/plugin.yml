@@ -1,7 +1,0 @@
-name: SkyExcelCore
-main: me.github.skyexcelcore.SkyExcel
-version: 1.0
-api-version: 1.13
-commands:
-  Hi:
-  abcd:
