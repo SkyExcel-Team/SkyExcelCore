@@ -1,4 +1,4 @@
-package text;
+package skyexcel.text;
 
 import net.md_5.bungee.api.ChatColor;
 
