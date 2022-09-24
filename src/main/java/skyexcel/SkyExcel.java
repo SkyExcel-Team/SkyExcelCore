@@ -25,10 +25,7 @@ public class SkyExcel extends JavaPlugin {
 //        new Registerclass(new test(), this);
 //        new Registerclass(new abcd(), this);
 
-        Address address = new Address();
-        if (!address.Equal(0, "survivalgame.n-e.kr")) {
-            plugin.getServer().getPluginManager().disablePlugin(this);
-        }
+
     }
 
     public static void setNewPlugin(Plugin newPlugin) {
