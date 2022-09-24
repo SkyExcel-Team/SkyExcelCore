@@ -35,9 +35,10 @@ public class SkyExcel extends JavaPlugin {
         Korean.setPlugin(this);
         Korean.loadDefaultPluginConfig();
 
+
         if (config.getString("lang").equalsIgnoreCase("English")) {
             System.out.println(english.getString("test"));
-        } else if(config.getString("lang").equalsIgnoreCase("Korean")){
+        } else if (config.getString("lang").equalsIgnoreCase("Korean")) {
             System.out.println(Korean.getString("test"));
         }
 
