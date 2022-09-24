@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import skyexcel.data.Item.NBTData;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -478,5 +479,9 @@ public class Config {
 
     public ConfigurationSection newSection(String path) {
         return getConfig().createSection(path);
+    }
+
+    public Plugin getPlugin() {
+        return plugin;
     }
 }

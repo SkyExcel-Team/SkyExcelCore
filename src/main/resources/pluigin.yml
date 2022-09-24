@@ -1,1 +1,3 @@
-123124314
+name: SkyExcel
+main: skyexcel.SkyExcel
+version: 1.0
