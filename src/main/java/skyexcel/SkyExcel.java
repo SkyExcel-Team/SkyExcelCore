@@ -1,6 +1,7 @@
 package skyexcel;
 
 import skyexcel.annotation.Registerclass;
+import skyexcel.bstat.Metrics;
 import skyexcel.command.abcd;
 import skyexcel.command.test;
 import skyexcel.customer.Address;
@@ -22,9 +23,8 @@ public class SkyExcel extends JavaPlugin {
 
         super.onEnable();
         plugin = this;
-//        new Registerclass(new test(), this);
-//        new Registerclass(new abcd(), this);
-
+        int pluginId = 16492;
+        new Metrics(this, pluginId);
 
     }
 
@@ -39,7 +39,6 @@ public class SkyExcel extends JavaPlugin {
     public static SkyExcel getPlugin() {
         return plugin;
     }
-
 
 
     public static void RegisterEvents(Plugin plugin, Listener listener) {
