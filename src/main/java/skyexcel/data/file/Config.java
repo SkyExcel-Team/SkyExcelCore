@@ -14,7 +14,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import skyexcel.data.Item.NBTData;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +24,7 @@ import java.util.List;
 import java.util.Set;
 
 @SuppressWarnings("all")
-public class Config {
+public class Config   {
     public FileConfiguration config;
     public File file;
     private String name;
@@ -34,6 +33,7 @@ public class Config {
     private Plugin plugin;
 
     public Config(String name) {
+
         this.name = name;
     }
 

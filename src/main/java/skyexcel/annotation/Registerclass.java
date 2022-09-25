@@ -119,7 +119,6 @@ public class Registerclass implements CommandExecutor, TabCompleter {
                             }
                         }
                     }
-
                 }
             }
         } catch (ClassNotFoundException e) {
@@ -146,7 +145,6 @@ public class Registerclass implements CommandExecutor, TabCompleter {
             for (Parameter parameter : this.tabs) {
                 if (parameter.console) {
                     invoke(clazz.getClass(), sender, args);
-
                 }
             }
         }
