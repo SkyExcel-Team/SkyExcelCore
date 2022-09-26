@@ -4,7 +4,5 @@ public class English extends Lang{
 
     public English() {
         super("English");
-
     }
-
 }

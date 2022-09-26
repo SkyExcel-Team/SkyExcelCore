@@ -39,7 +39,6 @@ public class SkyExcel extends JavaPlugin {
         japanese.loadDefaultPluginConfig();
         plugin = this;
 
-        Lang.getLang(config, this);
         new Metrics(this, pluginId);
     }
 
