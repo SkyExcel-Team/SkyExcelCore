@@ -1,53 +1,41 @@
 package skyexcel;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.scoreboard.DisplaySlot;
 import skyexcel.bstat.Metrics;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import skyexcel.data.file.Config;
-import skyexcel.data.file.lang.Japanese;
-import skyexcel.data.file.lang.Lang;
+import skyexcel.scoreboard.ScoreBoardAPI;
 
 
-public class SkyExcel extends JavaPlugin {
+public class SkyExcel extends JavaPlugin implements Listener{
 
     public static SkyExcel plugin;
 
-    public static Plugin newPlugin;
-
-    public static Config config;
-
-    public static Config english;
-
-    public static Config korean;
-    public static Config japanese;
-    public static Config chinese;
     int pluginId = 16492;
 
     @Override
     public void onEnable() {
         super.onEnable();
-
-        config = new Config("config");
-        config.setPlugin(this);
-        config.loadDefaultPluginConfig();
-
-        System.out.println(Lang.getLang(config, this).getString("test"));
-
-        japanese = new Japanese(this);
-        japanese.loadDefaultPluginConfig();
         plugin = this;
 
         new Metrics(this, pluginId);
+        Bukkit.getPluginManager().registerEvents(this,this);
     }
 
-    public static void setNewPlugin(Plugin newPlugin) {
-        SkyExcel.newPlugin = newPlugin;
-    }
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event){
+        Player player = event.getPlayer();
 
-    public static Plugin getNewPlugin() {
-        return newPlugin;
+        ScoreBoardAPI scoreboard = new ScoreBoardAPI("test","dummy");
+        scoreboard.newScoreBoard(DisplaySlot.SIDEBAR);
+        scoreboard.newLine(player.getDisplayName(),1);
+        player.setScoreboard(scoreboard.getBoard());
     }
 
     public static SkyExcel getPlugin() {
