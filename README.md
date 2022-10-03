@@ -18,29 +18,21 @@ dependencies {
 # Command Examples for Java
 
 ```java
-public class Command {
-    private String label = "games";
-
-    public Command(String cmd) {
-        this.label = cmd;
-        
-        Tab<Object, String> tab = new Tab<>();
+       Tab<Object, String> tab = new Tab<>(MiniGame.plugin, label);
 
         tab.args("생성", "이름");
         tab.args("랭킹");
         tab.args("은행", "입금", "[<Integer>]");
         tab.args("은행", "출금", "[<Integer>]");
 
-    }
-}
-```
-```java
-  Cmd cmd = new Cmd(this, "test");
+        Cmd cmd = new Cmd(MiniGame.plugin, label);
 
         cmd.action("은행", 0, action -> {
             Player player = (Player) action.getSender();
-            player.sendMessage("은행 시스템을 열었습니다!");
+            player.sendMessage("섬 은행 시스템을 열었습니다!");
         });
- ```
+
+```
+ 
 
 ---
