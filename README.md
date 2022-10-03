@@ -9,19 +9,11 @@ repositories {
 }
 
 dependencies {
-    implementation("io.github.brucefreedy:mccommand:1.0.1")
+    implementation 'com.github.SkyExcel-Team:SkyExcelCore:v1.1.14'
+
 }
 ```
-
-```gradle
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    implementation 'io.github.brucefreedy:mccommand:1.0.1'
-}
-```
+ 
 
 # Command-Examples for Java
 
