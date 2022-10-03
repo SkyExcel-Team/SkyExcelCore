@@ -39,8 +39,6 @@ dependencies {
     // The Spigot API with no shadowing. Requires the OSS repo.
     compileOnly("org.spigotmc:spigot:1.18.2-R0.1-SNAPSHOT")
     compileOnly fileTree(dir: 'api', include: ['*.jar'])
-    implementation 'org.reflections:reflections:0.10.2'
-    implementation 'com.github.DV8FromTheWorld:JDA:v5.0.0-alpha.20'
 }
 
 
