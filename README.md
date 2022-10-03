@@ -31,24 +31,14 @@ public class Command {
 
     public Command(String cmd) {
         this.label = cmd;
+        
+        Tab<Object, String> tab = new Tab<>();
 
-        Config config = new Config("test/");
-        config.setPlugin(MiniGame.plugin);
+        tab.args("생성", "이름");
+        tab.args("랭킹");
+        tab.args("은행", "입금", "[<Integer>]");
+        tab.args("은행", "출금", "[<Integer>]");
 
-        Commands commands = new Commands(label) {
-            @Override
-            public void run(CommandSender sender, String[] args) {
-                sender.sendMessage("asfd");
-            }
-        };
-
-        Tab tab = new Tab(commands, List.of(
-            List.of(Arrays.toString(config.getFileList())),
-            List.of("test2", "asdf2"),
-            List.of("test3", "asdf3", "1234"))) {
-        };
-
-        tab.select(1).of(0).is(config.getFileList() != null);
     }
 }
 ```
