@@ -34,5 +34,13 @@ public class Command {
     }
 }
 ```
+```java
+  Cmd cmd = new Cmd(this, "test");
+
+        cmd.action("은행", 0, action -> {
+            Player player = (Player) action.getSender();
+            player.sendMessage("은행 시스템을 열었습니다!");
+        });
+ ```
 
 ---
