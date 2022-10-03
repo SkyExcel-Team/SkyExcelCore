@@ -11,8 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import skyexcel.command.tab.Commands;
-import skyexcel.command.tab.test;
+
 import skyexcel.scoreboard.ScoreBoardAPI;
 
 
@@ -28,18 +27,6 @@ public class SkyExcel extends JavaPlugin implements Listener, CommandExecutor {
         plugin = this;
 
         new Metrics(this, pluginId);
-        Bukkit.getPluginManager().registerEvents(this, this);
-
-    }
-
-    @EventHandler
-    public void onJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-
-        ScoreBoardAPI scoreboard = new ScoreBoardAPI("test", "dummy");
-        scoreboard.newScoreBoard(DisplaySlot.SIDEBAR);
-        scoreboard.newLine(player.getDisplayName(), 1);
-        player.setScoreboard(scoreboard.getBoard());
     }
 
     public static SkyExcel getPlugin() {
