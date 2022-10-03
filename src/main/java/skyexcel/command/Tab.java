@@ -31,7 +31,7 @@ public class Tab<P, N> implements TabCompleter {
      * @param previous args[0] 명령어
      * @param next 다음에 올 명령어 리스트
      */
-    public void put(P previous, N... next) {
+    public void args(P previous, N... next) {
 
         TabNode newnode = new TabNode(previous, next);
 
