@@ -15,7 +15,7 @@ dependencies {
 ```
  
 
-# Command-Examples for Java
+# Command Examples for Java
 
 ```java
 public class Command {
