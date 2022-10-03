@@ -1,4 +1,4 @@
-package skyexcel.command;
+package skyexcel.command.tab;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
