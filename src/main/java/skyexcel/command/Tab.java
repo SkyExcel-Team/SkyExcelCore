@@ -27,9 +27,8 @@ public class Tab<P, N> implements TabCompleter {
 
 
     /**
-     *
      * @param previous args[0] 명령어
-     * @param next 다음에 올 명령어 리스트
+     * @param next     다음에 올 명령어 리스트
      */
     public void args(P previous, N... next) {
 
@@ -50,6 +49,7 @@ public class Tab<P, N> implements TabCompleter {
 
             this.n = n;
         }
+
         public N getN(P p) {
             if (p.equals(p))
                 return n;

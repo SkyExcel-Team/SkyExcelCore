@@ -3,6 +3,7 @@ package skyexcel.data.file;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -14,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import skyexcel.data.Item.NBTData;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,7 +26,7 @@ import java.util.List;
 import java.util.Set;
 
 @SuppressWarnings("all")
-public class Config   {
+public class Config implements AConfig {
     public FileConfiguration config;
     public File file;
     private String name;
@@ -33,6 +35,7 @@ public class Config   {
     private Plugin plugin;
 
     public Config(String name) {
+
 
         this.name = name;
     }
@@ -117,9 +120,10 @@ public class Config   {
 
     }
 
-    public void setInteger(String path, int integer) {
-        getConfig().set(path, integer);
-        saveConfig();
+
+    @Override
+    public void setInteger(String path, int value) {
+
     }
 
     public void setBoolean(String path, boolean Boolean) {
@@ -155,6 +159,32 @@ public class Config   {
 
     }
 
+    @Override
+    public void setLocation(String path, Location value) {
+        getConfig().set(path + ".world", value.getWorld().getName());
+        getConfig().set(path + ".x", value.getX());
+        getConfig().set(path + ".y", value.getY());
+        getConfig().set(path + ".z", value.getZ());
+        getConfig().set(path + ".pitch", value.getPitch());
+        getConfig().set(path + ".yaw", value.getYaw());
+        saveConfig();
+    }
+
+    @Override
+    public void setSound(String path, Sound value) {
+
+    }
+
+    @Override
+    public void setLong(String path, long value) {
+
+    }
+
+    @Override
+    public void setList(String path, List<Object> value) {
+
+    }
+
     public void setObject(String path, Object value) {
 
         getConfig().set(path, value);
@@ -162,31 +192,31 @@ public class Config   {
 
     }
 
-    public boolean setLocation(String path, Location value) {
-
-        getConfig().set(path + ".world", value.getWorld().getName());
-        getConfig().set(path + ".x", value.getX());
-        getConfig().set(path + ".y", value.getY());
-        getConfig().set(path + ".z", value.getZ());
-        getConfig().set(path + ".pitch", value.getPitch());
-        getConfig().set(path + ".yaw", value.getYaw());
-        return this.saveConfig();
+    @Override
+    public int getInteger(String path) {
+        return 0;
     }
 
-    public ItemStack setItemStack(String path, ItemStack item) {
-        if (item.hasItemMeta()) {
-            getConfig().set(path + ".meta.name", item.getItemMeta().getDisplayName());
-            getConfig().set(path + ".meta.lore", item.getItemMeta().getLore());
-            if (item.getItemMeta().hasCustomModelData()) {
-                getConfig().set(path + ".meta.CustomModelData", item.getItemMeta().getCustomModelData());
+
+    @Override
+    public boolean getBoolean(String path) {
+        return false;
+    }
+
+
+    @Override
+    public void setItemStack(String path, ItemStack value) {
+        if (value.hasItemMeta()) {
+            getConfig().set(path + ".meta.name", value.getItemMeta().getDisplayName());
+            getConfig().set(path + ".meta.lore", value.getItemMeta().getLore());
+            if (value.getItemMeta().hasCustomModelData()) {
+                getConfig().set(path + ".meta.CustomModelData", value.getItemMeta().getCustomModelData());
             }
         }
-        getConfig().set(path + ".type", item.getType().name());
-        getConfig().set(path + ".amount", item.getAmount());
-
+        getConfig().set(path + ".type", value.getType().name());
+        getConfig().set(path + ".amount", value.getAmount());
 
         saveConfig();
-        return item;
     }
 
     public List<ItemStack> addItemStack(String path, ItemStack stack) {
@@ -344,20 +374,19 @@ public class Config   {
         return getConfig().getString(path);
     }
 
-    public int getInteger(String path) {
-        return getConfig().getInt(path);
-    }
 
     public double getDouble(String path) {
         return getConfig().getDouble(path);
     }
 
-    public boolean getBoolean(String path) {
-        return getConfig().getBoolean(path);
+    @Override
+    public long getLong(String path) {
+        return 0;
     }
 
-    public long getLong(String path) {
-        return getConfig().getLong(path);
+    @Override
+    public Object getObject(String path) {
+        return null;
     }
 
 
@@ -365,10 +394,6 @@ public class Config   {
         this.file = new File(plugin.getDataFolder(), name + ".yml");
 
         return this.file.delete();
-    }
-
-    public Object get(String path) {
-        return this.config.get(path);
     }
 
 
