@@ -34,10 +34,10 @@ public class Command {
         
         Tab<Object, String> tab = new Tab<>();
 
-        tab.put("생성", "이름");
-        tab.put("랭킹");
-        tab.put("은행", "입금", "[<Integer>]");
-        tab.put("은행", "출금", "[<Integer>]");
+        tab.args("생성", "이름");
+        tab.args("랭킹");
+        tab.args("은행", "입금", "[<Integer>]");
+        tab.args("은행", "출금", "[<Integer>]");
 
     }
 }
