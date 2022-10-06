@@ -37,11 +37,20 @@ public class Tab<P, N> implements TabCompleter {
         node.add(newnode);
     }
 
+    public void args(boolean isOp, P previous, N... next) {
+
+        TabNode newnode = new TabNode(previous, next);
+        newnode.setOp(isOp);
+        node.add(newnode);
+    }
+
     private final class TabNode<P, N> {
 
         private P p;
 
         private N n;
+
+        private boolean isOp = true;
 
 
         public TabNode(P p, N n) {
@@ -50,10 +59,18 @@ public class Tab<P, N> implements TabCompleter {
             this.n = n;
         }
 
+        public void setOp(boolean op) {
+            isOp = op;
+        }
+
         public N getN(P p) {
             if (p.equals(p))
                 return n;
             return null;
+        }
+
+        public boolean isOp() {
+            return isOp;
         }
 
         public P getP() {
@@ -80,7 +97,8 @@ public class Tab<P, N> implements TabCompleter {
                         if (args[0].equalsIgnoreCase((String) tabs.getP())) {
                             String[] test = (String[]) tabs.getN(tabs.getP());
                             int index = args.length - 2;
-                            result.add(test[index]);
+                            if (tabs.isOp())
+                                result.add(test[index]);
                         }
 
                     }
