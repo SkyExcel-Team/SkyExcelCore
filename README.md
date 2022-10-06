@@ -1,7 +1,7 @@
 # SkyExcelCore
 ![](https://bstats.org/signatures/bukkit/SkyExcelCore.svg)
 
-# Import 
+# Import Gradle
 
 ```gradle
 repositories {
