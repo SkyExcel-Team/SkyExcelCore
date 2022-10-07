@@ -35,6 +35,23 @@ public class Tab<P, N> implements TabCompleter {
         TabNode newnode = new TabNode(previous, next);
 
         node.add(newnode);
+
+    }
+
+
+    /***
+     * Op 여부를 지정하여 저장 가능.
+     * 마지막으로 설정한 값의 Op를 설정해 주는 메소드 이다.
+     * 그러므로, 먼저 args 메소드를 사용 후 이 메소드를 사용 하는게 맞는 순서 이다.
+     *
+     *
+     * @param isOp 해당 변수의 초기값은 true 이다. false로 변수를 바꾸어 주면 오피가 아닌 플레이어에게 return 값이 안 보일 것이다.
+     */
+    public void setOp(boolean isOp) {
+        int index = node.size() - 1;
+        TabNode setNode = node.get(index);
+        setNode.setOp(isOp);
+        node.set(index, setNode);
     }
 
     private final class TabNode<P, N> {
@@ -43,6 +60,7 @@ public class Tab<P, N> implements TabCompleter {
 
         private N n;
 
+        private boolean isOp = true;
 
         public TabNode(P p, N n) {
             this.p = p;
@@ -50,10 +68,18 @@ public class Tab<P, N> implements TabCompleter {
             this.n = n;
         }
 
+        public void setOp(boolean op) {
+            isOp = op;
+        }
+
         public N getN(P p) {
             if (p.equals(p))
                 return n;
             return null;
+        }
+
+        public boolean isOp() {
+            return isOp;
         }
 
         public P getP() {
@@ -70,17 +96,27 @@ public class Tab<P, N> implements TabCompleter {
             if (args.length == 1) {
                 for (TabNode tabs : node) {
                     if (tabs.getP() instanceof String) {
-                        String previous = (String) tabs.getP();
-                        result.add(previous);
+                        if (tabs.isOp()) {
+                            if (sender.isOp()) {
+                                String previous = (String) tabs.getP();
+
+                                result.add(previous);
+                            }
+                        }
                     }
                 }
             } else {
                 for (TabNode tabs : node) {
                     if (tabs.getP() instanceof String) {
                         if (args[0].equalsIgnoreCase((String) tabs.getP())) {
-                            String[] test = (String[]) tabs.getN(tabs.getP());
-                            int index = args.length - 2;
-                            result.add(test[index]);
+                            if (tabs.isOp()) {
+                                if (sender.isOp()) {
+                                    String[] test = (String[]) tabs.getN(tabs.getP());
+                                    int index = args.length - 2;
+
+                                    result.add(test[index]);
+                                }
+                            }
                         }
 
                     }
