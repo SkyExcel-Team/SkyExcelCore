@@ -511,6 +511,20 @@ public class Config implements AConfig {
         }
     }
 
+    public List<String> fileListName(){
+        this.file = new File(plugin.getDataFolder(), name);
+        ArrayList<String> newArray = new ArrayList<>();
+        File[] test = this.file.listFiles();
+        for (File file : test) {
+            if (file != null) {
+                String name = file.getName();
+                name = name.replaceAll(".yml", "");
+                newArray.add(name);
+            }
+        }
+        return newArray;
+
+    }
 
     public File[] getFileList() {
         this.file = new File(plugin.getDataFolder(), name);
