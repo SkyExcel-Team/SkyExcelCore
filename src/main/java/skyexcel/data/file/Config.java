@@ -1,10 +1,12 @@
 package skyexcel.data.file;
 
+import com.google.common.io.Files;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.HumanEntity;
@@ -20,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -58,6 +61,18 @@ public class Config implements AConfig {
             YamlConfiguration config = YamlConfiguration.loadConfiguration(new InputStreamReader(inputStream));
             this.config.setDefaults(config);
         }
+    }
+
+
+    public FileConfiguration loadDefualtConfig() {
+        config = new YamlConfiguration();
+        File file = new File(plugin.getDataFolder() + File.separator + name + ".yml");
+        try {
+            config.loadFromString(Files.toString(file, Charset.forName("UTF-8")));
+        } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
+        return config;
     }
 
     public boolean isFileExist() {
