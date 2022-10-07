@@ -31,7 +31,6 @@ public class Tab<P, N> implements TabCompleter {
      * @param next     다음에 올 명령어 리스트
      */
     public void args(P previous, N... next) {
-
         TabNode newnode = new TabNode(previous, next);
 
         node.add(newnode);
@@ -93,40 +92,38 @@ public class Tab<P, N> implements TabCompleter {
         try {
             if (args.length == 1) {
                 for (TabNode tabs : node) {
-                    if (tabs.isOp) {
-
-                        if (tabs.getP() instanceof String) {
-                            String previous = (String) tabs.getP();
-                            result.add(previous);
-                        }
-
-                    } else {
+                    if (tabs.isOp()) {
                         if (sender.isOp()) {
                             if (tabs.getP() instanceof String) {
+
                                 String previous = (String) tabs.getP();
                                 result.add(previous);
                             }
+                        }
+                    } else {
+                        if (tabs.getP() instanceof String) {
+
+                            String previous = (String) tabs.getP();
+                            result.add(previous);
                         }
                     }
                 }
             } else {
                 for (TabNode tabs : node) {
-
-                    if (tabs.isOp) {
+                    if (tabs.isOp()) {
                         if (sender.isOp()) {
-                            if (tabs.getP() instanceof String) {
-                                if (args[0].equalsIgnoreCase((String) tabs.getP())) {
-                                    String[] test = (String[]) tabs.getN(tabs.getP());
-                                    int index = args.length - 2;
-                                    result.add(test[index]);
+                            if (((String) tabs.getP()).equalsIgnoreCase(args[0])) {
+                                String[] arg = (String[]) tabs.getN(tabs.getP());
+                                for (String test : arg) {
+                                    result.add(test);
                                 }
                             }
                         }
-                    } else {
-                        if (sender.isOp()) {
-                            if (tabs.getP() instanceof String) {
-                                String previous = (String) tabs.getP();
-                                result.add(previous);
+                    } else{
+                        if (((String) tabs.getP()).equalsIgnoreCase(args[0])) {
+                            String[] arg = (String[]) tabs.getN(tabs.getP());
+                            for (String test : arg) {
+                                result.add(test);
                             }
                         }
                     }
@@ -137,4 +134,6 @@ public class Tab<P, N> implements TabCompleter {
         }
         return result;
     }
+
+
 }
