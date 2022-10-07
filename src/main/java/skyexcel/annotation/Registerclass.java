@@ -35,6 +35,9 @@ public class Registerclass implements CommandExecutor, TabCompleter {
         plugin.getServer().getPluginCommand(label).setTabCompleter(this);
     }
 
+    public String getLabel() {
+        return label;
+    }
 
     public void registerClass(Class clazz) {
         Adjust adjustclass = (Adjust) clazz.getAnnotation(Adjust.class);
