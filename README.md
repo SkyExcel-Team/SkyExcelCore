@@ -9,7 +9,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.SkyExcel-Team:SkyExcelCore:v#1'
+    implementation 'com.github.SkyExcel-Team:SkyExcelCore:v1.1.21'
 
 }
 ```
