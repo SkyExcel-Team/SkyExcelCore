@@ -67,6 +67,7 @@ public class Tab<P, N> implements TabCompleter {
 
         public void setOp(boolean op) {
             isOp = op;
+
         }
 
         public N getN(P p) {
@@ -92,20 +93,42 @@ public class Tab<P, N> implements TabCompleter {
         try {
             if (args.length == 1) {
                 for (TabNode tabs : node) {
-                    if (tabs.getP() instanceof String) {
-                        String previous = (String) tabs.getP();
-                        result.add(previous);
+                    if (tabs.isOp) {
+
+                        if (tabs.getP() instanceof String) {
+                            String previous = (String) tabs.getP();
+                            result.add(previous);
+                        }
+
+                    } else {
+                        if (sender.isOp()) {
+                            if (tabs.getP() instanceof String) {
+                                String previous = (String) tabs.getP();
+                                result.add(previous);
+                            }
+                        }
                     }
                 }
             } else {
                 for (TabNode tabs : node) {
-                    if (tabs.getP() instanceof String) {
-                        if (args[0].equalsIgnoreCase((String) tabs.getP())) {
-                            String[] test = (String[]) tabs.getN(tabs.getP());
-                            int index = args.length - 2;
-                            result.add(test[index]);
-                        }
 
+                    if (tabs.isOp) {
+                        if (sender.isOp()) {
+                            if (tabs.getP() instanceof String) {
+                                if (args[0].equalsIgnoreCase((String) tabs.getP())) {
+                                    String[] test = (String[]) tabs.getN(tabs.getP());
+                                    int index = args.length - 2;
+                                    result.add(test[index]);
+                                }
+                            }
+                        }
+                    } else {
+                        if (sender.isOp()) {
+                            if (tabs.getP() instanceof String) {
+                                String previous = (String) tabs.getP();
+                                result.add(previous);
+                            }
+                        }
                     }
                 }
             }
