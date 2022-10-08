@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -51,12 +52,22 @@ public class Tab<P, N> implements TabCompleter {
         node.set(index, setNode);
     }
 
+
+    public void setPer(String... per) {
+        int index = node.size() - 1;
+        TabNode setNode = node.get(index);
+        setNode.setPer(per);
+        node.set(index, setNode);
+    }
+
     private final class TabNode<P, N> {
 
         private N n;
         private P p;
 
         private boolean isOp = true;
+
+        private String[] per;
 
         public TabNode(P p, N n) {
             this.p = p;
@@ -66,13 +77,20 @@ public class Tab<P, N> implements TabCompleter {
 
         public void setOp(boolean op) {
             isOp = op;
+        }
 
+        public void setPer(String[] per) {
+            this.per = per;
         }
 
         public N getN(P p) {
             if (p.equals(p))
                 return n;
             return null;
+        }
+
+        public String[] getPer() {
+            return per;
         }
 
         public boolean isOp() {
@@ -92,19 +110,20 @@ public class Tab<P, N> implements TabCompleter {
         try {
             if (args.length == 1) {
                 for (TabNode tabs : node) {
+
                     if (tabs.isOp()) {
                         if (sender.isOp()) {
                             if (tabs.getP() instanceof String) {
-
                                 String previous = (String) tabs.getP();
                                 result.add(previous);
                             }
                         }
                     } else {
                         if (tabs.getP() instanceof String) {
-
                             String previous = (String) tabs.getP();
-                            result.add(previous);
+                            if (hasPer(tabs, sender)) {
+                                result.add(previous);
+                            }
                         }
                     }
                 }
@@ -112,22 +131,22 @@ public class Tab<P, N> implements TabCompleter {
                 for (TabNode tabs : node) {
                     if (tabs.isOp()) {
                         if (sender.isOp()) {
-
                             String previous = (String) tabs.getP();
                             if (previous.equalsIgnoreCase(args[0])) {
                                 String[] arg = (String[]) tabs.getN(previous);
-
                                 if (arg.length >= args.length - 1) {
-
-                                    result.add(arg[args.length - 2]);
+                                    result.add(previous);
                                 }
                             }
                         }
                     } else {
-                        if (((String) tabs.getP()).equalsIgnoreCase(args[0])) {
-                            String[] arg = (String[]) tabs.getN(tabs.getP());
-                            for (String test : arg) {
-                                result.add(test);
+                        String previous = (String) tabs.getP();
+                        if (previous.equalsIgnoreCase(args[0])) {
+                            String[] arg = (String[]) tabs.getN(previous);
+                            if (arg.length >= args.length - 1) {
+                                if (hasPer(tabs, sender)) {
+                                    result.add(previous);
+                                }
                             }
                         }
                     }
@@ -137,5 +156,18 @@ public class Tab<P, N> implements TabCompleter {
 
         }
         return result;
+    }
+
+    private boolean hasPer(TabNode tabs, CommandSender sender) {
+        if (tabs.getPer() != null) {
+            for (String per : tabs.getPer()) {
+                if (sender.hasPermission(per)) {
+                    return true;
+                }
+            }
+        } else {
+            return true;
+        }
+        return false;
     }
 }
