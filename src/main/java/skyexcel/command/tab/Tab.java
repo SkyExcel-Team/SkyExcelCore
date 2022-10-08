@@ -112,14 +112,18 @@ public class Tab<P, N> implements TabCompleter {
                 for (TabNode tabs : node) {
                     if (tabs.isOp()) {
                         if (sender.isOp()) {
-                            if (((String) tabs.getP()).equalsIgnoreCase(args[0])) {
-                                String[] arg = (String[]) tabs.getN(tabs.getP());
-                                for (String test : arg) {
-                                    result.add(test);
+
+                            String previous = (String) tabs.getP();
+                            if (previous.equalsIgnoreCase(args[0])) {
+                                String[] arg = (String[]) tabs.getN(previous);
+
+                                if (arg.length >= args.length - 1) {
+
+                                    result.add(arg[args.length - 2]);
                                 }
                             }
                         }
-                    } else{
+                    } else {
                         if (((String) tabs.getP()).equalsIgnoreCase(args[0])) {
                             String[] arg = (String[]) tabs.getN(tabs.getP());
                             for (String test : arg) {
@@ -134,6 +138,4 @@ public class Tab<P, N> implements TabCompleter {
         }
         return result;
     }
-
-
 }
