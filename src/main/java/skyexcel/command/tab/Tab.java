@@ -110,20 +110,19 @@ public class Tab<P, N> implements TabCompleter {
         try {
             if (args.length == 1) {
                 for (TabNode tabs : node) {
-
                     if (tabs.isOp()) {
                         if (sender.isOp()) {
                             if (tabs.getP() instanceof String) {
+
                                 String previous = (String) tabs.getP();
                                 result.add(previous);
                             }
                         }
                     } else {
                         if (tabs.getP() instanceof String) {
+
                             String previous = (String) tabs.getP();
-                            if (hasPer(tabs, sender)) {
-                                result.add(previous);
-                            }
+                            result.add(previous);
                         }
                     }
                 }
@@ -131,22 +130,22 @@ public class Tab<P, N> implements TabCompleter {
                 for (TabNode tabs : node) {
                     if (tabs.isOp()) {
                         if (sender.isOp()) {
+
                             String previous = (String) tabs.getP();
                             if (previous.equalsIgnoreCase(args[0])) {
                                 String[] arg = (String[]) tabs.getN(previous);
+
                                 if (arg.length >= args.length - 1) {
-                                    result.add(previous);
+
+                                    result.add(arg[args.length - 2]);
                                 }
                             }
                         }
                     } else {
-                        String previous = (String) tabs.getP();
-                        if (previous.equalsIgnoreCase(args[0])) {
-                            String[] arg = (String[]) tabs.getN(previous);
-                            if (arg.length >= args.length - 1) {
-                                if (hasPer(tabs, sender)) {
-                                    result.add(previous);
-                                }
+                        if (((String) tabs.getP()).equalsIgnoreCase(args[0])) {
+                            String[] arg = (String[]) tabs.getN(tabs.getP());
+                            for (String test : arg) {
+                                result.add(test);
                             }
                         }
                     }
