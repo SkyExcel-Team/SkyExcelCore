@@ -90,11 +90,20 @@ public class Cmd extends MainCmd {
     @Override
     public void runCmd(CommandSender sender, String[] args) {
         for (CmdNode node : nodes) {
-            if (node.getArg().equalsIgnoreCase(args[node.getIndex()])) {
-                Action action = new Action();
-                action.setArgs(args);
-                action.setSender(sender);
-                node.getAction().accept(action);
+            if (args.length > 0) {
+                if (node.getArg().equalsIgnoreCase(args[node.getIndex()])) {
+                    Action action = new Action();
+                    action.setArgs(args);
+                    action.setSender(sender);
+                    node.getAction().accept(action);
+                }
+            } else {
+                if (node.getArg().equalsIgnoreCase(args[0])) {
+                    Action action = new Action();
+                    action.setArgs(args);
+                    action.setSender(sender);
+                    node.getAction().accept(action);
+                }
             }
         }
     }
