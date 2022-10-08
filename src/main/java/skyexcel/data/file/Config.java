@@ -38,8 +38,6 @@ public class Config implements AConfig {
     private Plugin plugin;
 
     public Config(String name) {
-
-
         this.name = name;
     }
 
@@ -90,6 +88,22 @@ public class Config implements AConfig {
         File file = new File(plugin.getDataFolder(), name + ".yml");
 
         this.file.renameTo(file);
+    }
+
+    /***
+     * 파일을 다른 경로로 보내고, 원래 있는 파일은 지운다.
+     * @param path 파일이 이동할 경로
+     */
+    public boolean moveTo(String path) {
+        File newFile = new File(plugin.getDataFolder(), name + ".yml");
+        try {
+            deleteFile();
+            getConfig().save(newFile);
+            saveConfig();
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     public FileConfiguration getConfig() {
@@ -511,19 +525,20 @@ public class Config implements AConfig {
         }
     }
 
-    public List<String> fileListName(){
+    public List<String> fileListName() {
         this.file = new File(plugin.getDataFolder(), name);
         ArrayList<String> newArray = new ArrayList<>();
         File[] test = this.file.listFiles();
-        for (File file : test) {
-            if (file != null) {
-                String name = file.getName();
-                name = name.replaceAll(".yml", "");
-                newArray.add(name);
+        if (test != null) {
+            for (File file : test) {
+                if (file != null) {
+                    String name = file.getName();
+                    name = name.replaceAll(".yml", "");
+                    newArray.add(name);
+                }
             }
         }
         return newArray;
-
     }
 
     public File[] getFileList() {
