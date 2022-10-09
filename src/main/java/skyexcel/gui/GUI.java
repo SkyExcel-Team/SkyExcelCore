@@ -85,16 +85,20 @@ public class GUI {
         private String title;
         private Inventory inv;
 
+        private InventoryClickEvent event;
 
-        public Action(Player player, ItemStack item, int slot, String title, Inventory inv) {
+
+        public Action(InventoryClickEvent event, Player player, ItemStack item, int slot, String title, Inventory inv) {
             this.player = player;
             this.item = item;
             this.slot = slot;
             this.title = title;
             this.inv = inv;
+            this.event = event;
         }
 
-        public Action(Player player, int slot, String title, Inventory inv) {
+        public Action(InventoryClickEvent event, Player player, int slot, String title, Inventory inv) {
+            this.event = event;
             this.player = player;
             this.slot = slot;
             this.title = title;
@@ -120,10 +124,13 @@ public class GUI {
         public Inventory getInv() {
             return inv;
         }
+
+        public InventoryClickEvent getEvent() {
+            return event;
+        }
     }
 
     private static class Event implements Listener {
-
         @EventHandler
         public void onClick(InventoryClickEvent event) {
             if (event.getWhoClicked() instanceof Player) {
@@ -133,15 +140,16 @@ public class GUI {
 
                 Inventory inv = event.getClickedInventory();
                 ItemStack item = event.getCurrentItem();
+
                 if (node != null) {
                     for (Node newnode : node) {
                         if (slot == newnode.getSlot()) {
                             if (item != null) {
-                                Action action = new Action(player, item, slot, title, inv);
+                                Action action = new Action(event, player, item, slot, title, inv);
                                 newnode.getAction().accept(action);
 
                             } else {
-                                Action action = new Action(player, slot, title, inv);
+                                Action action = new Action(event, player, slot, title, inv);
                                 newnode.getAction().accept(action);
                             }
                         }
