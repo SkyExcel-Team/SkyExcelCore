@@ -78,7 +78,7 @@ public class GUI {
         }
     }
 
-    private static class Action {
+    public static class Action {
         private Player player;
         private ItemStack item;
         private int slot;
