@@ -15,6 +15,9 @@ public class Cmd extends MainCmd {
 
     private List<CmdNode> nodes = new ArrayList<>();
 
+    private Label label;
+
+
     public Cmd(Plugin plugin, String label) {
         super(plugin, label);
     }
@@ -26,6 +29,16 @@ public class Cmd extends MainCmd {
         node.setArg(args);
         node.setIndex(index);
         this.nodes.add(node);
+    }
+
+
+    public void label(Consumer<Action> action) {
+        Label label = new Label();
+
+        label.setLabel(getLabel());
+        label.setAction(action);
+
+        this.label = label;
     }
 
 
@@ -87,24 +100,82 @@ public class Cmd extends MainCmd {
         }
     }
 
+    public class Label {
+        private String[] args;
+        private String label;
+        private CommandSender sender;
+
+        private Consumer<Action> action;
+
+        public Label getThis() {
+            return this;
+        }
+
+        public void setAction(Consumer<Action> action) {
+            this.action = action;
+        }
+
+
+        public void setLabel(String label) {
+            this.label = label;
+        }
+
+        public Consumer<Action> getAction() {
+            return action;
+        }
+
+        public void setArgs(String[] args) {
+            this.args = args;
+        }
+
+        public void setSender(CommandSender sender) {
+            this.sender = sender;
+        }
+
+        public String[] getArgs() {
+            return args;
+        }
+
+        public CommandSender getSender() {
+            return sender;
+        }
+
+        public String getLabel() {
+            return label;
+        }
+    }
+
     @Override
-    public void runCmd(CommandSender sender, String[] args) {
-        for (CmdNode node : nodes) {
-            if (args.length > 0) {
-                if (node.getArg().equalsIgnoreCase(args[node.getIndex()])) {
+    public void runCmd(CommandSender sender, String label, String[] args) {
+        try {
+            if (label.equalsIgnoreCase(this.label.getLabel())) {
+                if (args.length == 0) {
                     Action action = new Action();
-                    action.setArgs(args);
                     action.setSender(sender);
-                    node.getAction().accept(action);
+                    action.setArgs(args);
+                    this.label.getAction().accept(action);
                 }
-            } else {
-                if (node.getArg().equalsIgnoreCase(args[0])) {
-                    Action action = new Action();
-                    action.setArgs(args);
-                    action.setSender(sender);
-                    node.getAction().accept(action);
+                for (CmdNode node : nodes) {
+                    if (args.length > 0) {
+                        if (node.getArg().equalsIgnoreCase(args[node.getIndex()])) {
+                            Action action = new Action();
+                            action.setArgs(args);
+                            action.setSender(sender);
+                            node.getAction().accept(action);
+                        }
+                    } else {
+                        if (node.getArg().equalsIgnoreCase(args[0])) {
+                            Action action = new Action();
+                            action.setArgs(args);
+                            action.setSender(sender);
+                            node.getAction().accept(action);
+                        }
+                    }
                 }
             }
+
+        } catch (ArrayIndexOutOfBoundsException e) {
+
         }
     }
 }

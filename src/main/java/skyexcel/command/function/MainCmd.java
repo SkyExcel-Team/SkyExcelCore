@@ -18,7 +18,11 @@ public abstract class MainCmd implements CommandExecutor, Function {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (label.equalsIgnoreCase(label))
-            runCmd(sender, args);
+            runCmd(sender,label, args);
         return false;
+    }
+
+    public String getLabel() {
+        return label;
     }
 }
