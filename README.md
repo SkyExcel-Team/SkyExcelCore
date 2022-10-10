@@ -13,7 +13,15 @@ dependencies {
 
 }
 ```
- 
+# Data Table Exmaples 
+```java
+private DataTable table;
+
+//Column, Row
+table = new DataTable(0, 0);
+```
+
+
 
 # Command Examples for Java
 
