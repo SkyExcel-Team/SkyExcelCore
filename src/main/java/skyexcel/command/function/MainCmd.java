@@ -22,7 +22,7 @@ public abstract class MainCmd implements CommandExecutor, Function {
         return false;
     }
 
-    public String getLabel() {
+    public String getCmdLabel() {
         return label;
     }
 }
