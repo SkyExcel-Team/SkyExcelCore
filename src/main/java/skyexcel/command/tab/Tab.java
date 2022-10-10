@@ -1,6 +1,5 @@
 package skyexcel.command.tab;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -8,10 +7,7 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 
 /**
@@ -19,8 +15,10 @@ import java.util.Objects;
  * N : Next ( Tab에 보일 커맨드 )
  * Previous 값을 통해 Next 값을 불러오는 구조이다.
  */
-public class Tab<P, N> implements TabCompleter {
-    private List<TabNode> node = new ArrayList<>();
+public class Tab<P> implements TabCompleter {
+
+    private NextList next = new NextList();
+
 
     public Tab(Plugin plugin, String label) {
         Objects.requireNonNull(plugin.getServer().getPluginCommand(label)).setTabCompleter(this);
@@ -31,11 +29,13 @@ public class Tab<P, N> implements TabCompleter {
      * @param previous args[0] 명령어
      * @param next     다음에 올 명령어 리스트
      */
-    public void args(P previous, N... next) {
-        TabNode newnode = new TabNode(previous, next);
+    public void args(P previous, Object... args) {
 
-        node.add(newnode);
+        next.add(args);
+
+        System.out.println(next.get(previous));
     }
+
 
     /***
      * Op 여부를 지정하여 저장 가능.
@@ -46,52 +46,27 @@ public class Tab<P, N> implements TabCompleter {
      * @param isOp 해당 변수의 초기값은 true 이다. false로 변수를 바꾸어 주면 오피가 아닌 플레이어에게 return 값이 안 보일 것이다.
      */
     public void setOp(boolean isOp) {
-        int index = node.size() - 1;
-        TabNode setNode = node.get(index);
-        setNode.setOp(isOp);
-        node.set(index, setNode);
+
     }
 
-
-    public void setPer(String... per) {
-        int index = node.size() - 1;
-        TabNode setNode = node.get(index);
-        setNode.setPer(per);
-        node.set(index, setNode);
-    }
 
     private final class TabNode<P, N> {
 
-        private N n;
+
         private P p;
 
         private boolean isOp = true;
 
-        private String[] per;
 
-        public TabNode(P p, N n) {
+        public TabNode(P e, Object... next) {
             this.p = p;
 
-            this.n = n;
         }
 
         public void setOp(boolean op) {
             isOp = op;
         }
 
-        public void setPer(String[] per) {
-            this.per = per;
-        }
-
-        public N getN(P p) {
-            if (p.equals(p))
-                return n;
-            return null;
-        }
-
-        public String[] getPer() {
-            return per;
-        }
 
         public boolean isOp() {
             return isOp;
@@ -102,6 +77,42 @@ public class Tab<P, N> implements TabCompleter {
         }
     }
 
+    /**
+     * 다음 값의 다음을 지정 하기 위해선, 해당 클래스를 노드 안에 넣어
+     * 현재 값이 커맨드 값과 같다면, 현재 커맨드 값으로 다음 값을 가져올 수 있도록 한다.
+     * 예:) 현재 커맨드 : /금고 입금 일때 다음 값으로 Amount를 출력한다.
+     * 해당 방식을 사용하면 /금고 잠금 과 같이 다음 파라미터 값이 없는 현재 값일 경우
+     * 다르게 추가 할 수 있다.
+     */
+    public class NextList {
+
+        private Object[] next;
+
+        private int size;
+
+
+        public void add(Object obj) {
+            size++;
+            assert obj != null;
+            this.next[size++] = obj;
+        }
+
+        public Object get(P e) {
+
+            for (Object obj : next) {
+                assert obj != null;
+                if (obj.equals(e)) {
+                    return obj;
+                }
+            }
+            return null;
+        }
+
+        public int getSize() {
+            return size;
+        }
+    }
+
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -109,64 +120,56 @@ public class Tab<P, N> implements TabCompleter {
 
         try {
             if (args.length == 1) {
-                for (TabNode tabs : node) {
-                    if (tabs.isOp()) {
-                        if (sender.isOp()) {
-                            if (tabs.getP() instanceof String) {
-
-                                String previous = (String) tabs.getP();
-                                result.add(previous);
-                            }
-                        }
-                    } else {
-                        if (tabs.getP() instanceof String) {
-
-                            String previous = (String) tabs.getP();
-                            result.add(previous);
-                        }
-                    }
-                }
+//                for (TabNode tabs : node) {
+//                    if (tabs.isOp()) {
+//                        if (sender.isOp()) {
+//                            if (tabs.getP() instanceof String) {
+//
+//                                String previous = (String) tabs.getP();
+//                                result.add(previous);
+//
+////                                String[] arg = (String[]) tabs.getN(previous);
+//
+//                            }
+//                        }
+//                    } else {
+//                        if (tabs.getP() instanceof String) {
+//
+//                            String previous = (String) tabs.getP();
+//                            result.add(previous);
+//                        }
+//                    }
+//                }
             } else {
-                for (TabNode tabs : node) {
-                    if (tabs.isOp()) {
-                        if (sender.isOp()) {
 
-                            String previous = (String) tabs.getP();
-                            if (previous.equalsIgnoreCase(args[0])) {
-                                String[] arg = (String[]) tabs.getN(previous);
-
-                                if (arg.length >= args.length - 1) {
-
-                                    result.add(arg[args.length - 2]);
-                                }
-                            }
-                        }
-                    } else {
-                        if (((String) tabs.getP()).equalsIgnoreCase(args[0])) {
-                            String[] arg = (String[]) tabs.getN(tabs.getP());
-                            for (String test : arg) {
-                                result.add(test);
-                            }
-                        }
-                    }
-                }
+//                for (TabNode tabs : node) {
+//                    if (tabs.isOp()) {
+//                        if (sender.isOp()) {
+//                            String previous = (String) tabs.getP();
+//
+//                            String[] arg = (String[]) tabs.getN(previous).next;
+//
+//
+//                            // 다차원 변수로 매게 변수들을 불러와, 비교하여저장한다.
+//                            System.out.println(arg.length);
+//
+//
+//                            result.add(arg[args.length - 1]);
+//
+//                        }
+//                    } else {
+//                        if (((String) tabs.getP()).equalsIgnoreCase(args[0])) {
+////                            String[] arg = (String[]) tabs.getN(tabs.getP());
+////                            for (String test : arg) {
+////                                result.add(test);
+////                            }
+//                        }
+//                    }
+//                }
             }
         } catch (ArrayIndexOutOfBoundsException e) {
 
         }
         return result;
-    }
-
-    private boolean hasPer(TabNode tabs, CommandSender sender) {
-        if (tabs.getPer() != null) {
-            for (String per : tabs.getPer()) {
-                if (sender.hasPermission(per)) {
-                    return true;
-                }
-            }
-        } else {
-            return true;
-        }
-        return false;
     }
 }
