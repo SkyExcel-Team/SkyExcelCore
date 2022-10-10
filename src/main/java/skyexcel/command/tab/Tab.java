@@ -6,6 +6,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import skyexcel.data.DataTable;
 
 import java.util.*;
 
@@ -19,8 +20,14 @@ public class Tab<P> implements TabCompleter {
 
     private NextList next = new NextList();
 
+    private List<String> pre = new ArrayList<>();
+    private List<Object> args = new ArrayList<>();
+
+    private DataTable table;
 
     public Tab(Plugin plugin, String label) {
+        table = new DataTable();
+
         Objects.requireNonNull(plugin.getServer().getPluginCommand(label)).setTabCompleter(this);
     }
 
@@ -29,11 +36,18 @@ public class Tab<P> implements TabCompleter {
      * @param previous args[0] 명령어
      * @param next     다음에 올 명령어 리스트
      */
-    public void args(P previous, Object... args) {
+    public void args(String previous, Object... args) {
 
-        next.add(args);
+        String newPre = (String) previous;
 
-        System.out.println(next.get(previous));
+
+        pre.add(previous);
+        this.args.add(args);
+
+        for (Object obj : this.args) {
+            System.out.println((String) obj);
+        }
+
     }
 
 
@@ -86,25 +100,18 @@ public class Tab<P> implements TabCompleter {
      */
     public class NextList {
 
-        private Object[] next;
+        private Object[] NEXT = {};
 
         private int size;
 
 
         public void add(Object obj) {
-            size++;
+
             assert obj != null;
-            this.next[size++] = obj;
         }
 
         public Object get(P e) {
 
-            for (Object obj : next) {
-                assert obj != null;
-                if (obj.equals(e)) {
-                    return obj;
-                }
-            }
             return null;
         }
 
