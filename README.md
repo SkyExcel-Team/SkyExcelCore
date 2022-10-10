@@ -13,7 +13,7 @@ dependencies {
 
 }
 ```
-#Data Table
+# Data Table Exmaples 
 ```java
 private DataTable table;
 
