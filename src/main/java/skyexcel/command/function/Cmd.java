@@ -35,12 +35,16 @@ public class Cmd extends MainCmd {
     public void label(Consumer<Action> action) {
         Label label = new Label();
 
-        label.setLabel(getLabel());
+        label.setLabel(getCmdLabel());
         label.setAction(action);
-
+        
         this.label = label;
     }
 
+
+    public Label getLabel() {
+        return label;
+    }
 
     public class CmdNode {
         private String arg;
@@ -145,16 +149,21 @@ public class Cmd extends MainCmd {
         }
     }
 
+
     @Override
     public void runCmd(CommandSender sender, String label, String[] args) {
         try {
             if (label.equalsIgnoreCase(this.label.getLabel())) {
+
+
                 if (args.length == 0) {
                     Action action = new Action();
                     action.setSender(sender);
                     action.setArgs(args);
                     this.label.getAction().accept(action);
                 }
+
+
                 for (CmdNode node : nodes) {
                     if (args.length > 0) {
                         if (node.getArg().equalsIgnoreCase(args[node.getIndex()])) {
