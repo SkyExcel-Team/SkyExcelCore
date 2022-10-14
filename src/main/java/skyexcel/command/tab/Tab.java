@@ -1,6 +1,8 @@
 package skyexcel.command.tab;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.Plugin;
@@ -19,6 +21,7 @@ public class Tab implements TabCompleter {
 
     private List<TabNode> tabNodes = new ArrayList<>();
 
+
     public Tab(Plugin plugin, String label) {
         Objects.requireNonNull(plugin.getServer().getPluginCommand(label)).setTabCompleter(this);
     }
@@ -32,24 +35,28 @@ public class Tab implements TabCompleter {
 
 
     public static class TabNode {
-        private String[] next;
+        private List<String> next = new ArrayList<>();
 
         private String pre;
 
 
         public TabNode(String pre, String... next) {
             this.pre = pre;
-            String[] newNext = new String[next.length];
 
             for (String line : next) {
-                newNext[next.length + 1] = line;
+                Bukkit.getConsoleSender().sendMessage(pre + " : " + line + " 등록 완료!");
+                this.next.add(line);
             }
 
-            this.next = newNext;
         }
 
         public String getNext(int index) {
-            return next[index];
+            return next.get(index);
+        }
+
+
+        public List<String> getNext() {
+            return next;
         }
 
         public String getPre() {
@@ -74,19 +81,19 @@ public class Tab implements TabCompleter {
                 }
 
             } else {
-//                for (TabNode tabs : node) {
-//                    if (tabs.getP() instanceof String) {
-//                        if (args[0].equalsIgnoreCase((String) tabs.getP())) {
-//                            String[] test = (String[]) tabs.getN(tabs.getP());
-//                            int index = args.length - 2;
-//                            if (tabs.isOp())
-//                                result.add(test[index]);
-//                        }
-//
-//                    }
-//                }
+                // TODO 문제점 : 인자값을 하나하나 비교해서 등록 해 줘야 함. 이 문제를 어떻게 해결하냐인데...
+                for (TabNode tabs : tabNodes) {
+                    if (tabs.pre.equalsIgnoreCase(args[0])) {
+                        System.out.println(tabs.getNext().size());
+                        if (args.length == 2) {
+                            result.add( tabs.getNext().get(0));
+                        } else if (tabs.getNext().get(0).equalsIgnoreCase(args[1])) {
+                            result.add(tabs.getNext().get(1));
+                        }
+                    }
+                }
             }
-        } catch (ArrayIndexOutOfBoundsException e) {
+        } catch (CommandException | IndexOutOfBoundsException e) {
 
         }
         return result;
