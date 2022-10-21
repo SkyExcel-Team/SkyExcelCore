@@ -18,10 +18,10 @@ import java.util.List;
 import java.util.Objects;
 
 @SuppressWarnings("all")
-public class NBTData {
+public class PDCData {
     private Plugin plugin;
 
-    public NBTData(Plugin plugin) {
+    public PDCData(Plugin plugin) {
         Objects.requireNonNull(plugin, "JeffLib hasn't been initialized.");
         this.plugin = plugin;
     }
