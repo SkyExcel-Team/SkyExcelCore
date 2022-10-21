@@ -19,8 +19,15 @@ public class DataTable {
     private Row row;
 
 
-    public DataTable(int colum, int row) {
+    public DataTable() {
+        row = new Row(0);
+        this.column = new Column(0);
+    }
 
+
+    public DataTable(int column, int row) {
+        this.row = new Row(row);
+        this.column = new Column(column);
     }
 
     public void find() {
@@ -38,6 +45,12 @@ public class DataTable {
     public static class Column {
         private int size;
 
+        private int column;
+
+        public Column(int column) {
+            this.column = column;
+        }
+
 
         public int getSize() {
             return size;
@@ -47,6 +60,11 @@ public class DataTable {
     public static class Row {
         private int size;
 
+        private int row;
+
+        public Row(int row) {
+            this.row = row;
+        }
 
         public int getSize() {
             return size;

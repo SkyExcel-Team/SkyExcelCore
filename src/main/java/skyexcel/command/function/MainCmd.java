@@ -6,12 +6,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public abstract class MainCmd implements CommandExecutor, Function {
-    private String label;
+    private final String label;
 
     protected MainCmd(Plugin plugin, String label) {
         this.label = label;
-        plugin.getServer().getPluginCommand(label).setExecutor(this);
+        Objects.requireNonNull(plugin.getServer().getPluginCommand(label)).setExecutor(this);
     }
 
 

@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -16,9 +17,9 @@ import java.util.function.Consumer;
 
 
 public class GUI {
-    private static List<Node> node = new ArrayList<>();
+    private static final List<Node> node = new ArrayList<>();
 
-    private Inventory inv;
+    private static Inventory inv;
 
 
     public GUI(Plugin plugin) {
@@ -50,7 +51,7 @@ public class GUI {
         player.openInventory(inv);
     }
 
-    public Inventory getInv() {
+    public static Inventory getInv() {
         return inv;
     }
 
@@ -59,6 +60,7 @@ public class GUI {
         private int slot;
 
         private Consumer<Action> action;
+
 
         private Node(int slot) {
             this.slot = slot;
@@ -76,6 +78,8 @@ public class GUI {
         public Consumer<Action> getAction() {
             return action;
         }
+
+
     }
 
     public static class Action {
@@ -101,6 +105,12 @@ public class GUI {
             this.event = event;
             this.player = player;
             this.slot = slot;
+            this.title = title;
+            this.inv = inv;
+        }
+
+        public Action(Player player, String title, Inventory inv) {
+            this.player = player;
             this.title = title;
             this.inv = inv;
         }
@@ -141,21 +151,14 @@ public class GUI {
                 Inventory inv = event.getClickedInventory();
                 ItemStack item = event.getCurrentItem();
 
-                if (node != null) {
-                    for (Node newnode : node) {
-                        if (slot == newnode.getSlot()) {
-                            if (item != null) {
-                                Action action = new Action(event, player, item, slot, title, inv);
-                                newnode.getAction().accept(action);
+                Action action = new Action(event, player, item, slot, title, inv);
 
-                            } else {
-                                Action action = new Action(event, player, slot, title, inv);
-                                newnode.getAction().accept(action);
-                            }
-                        }
-                    }
+                if (title.equalsIgnoreCase(action.getTitle())) {
+                    node.get(0).getAction().accept(action);
                 }
+
             }
         }
+
     }
 }

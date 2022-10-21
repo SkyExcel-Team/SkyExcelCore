@@ -16,7 +16,7 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
-import skyexcel.data.Item.NBTData;
+import skyexcel.data.Item.PDCData;
 
 import java.io.File;
 import java.io.IOException;
@@ -95,9 +95,12 @@ public class Config implements AConfig {
      * @param path 파일이 이동할 경로
      */
     public boolean moveTo(String path) {
+
         File newFile = new File(plugin.getDataFolder(), name + ".yml");
+
         try {
-            deleteFile();
+            System.out.println(config.getDefaults() + " 테스트");
+
             getConfig().save(newFile);
             saveConfig();
             return true;
@@ -344,7 +347,7 @@ public class Config implements AConfig {
         if (item.hasItemMeta()) {
             slot.set("Item.Meta.display-name", meta.getDisplayName());
             slot.set("Item.Meta.lore", meta.getLore());
-            NBTData nbtData = new NBTData(plugin);
+            PDCData nbtData = new PDCData(plugin);
             for (String key : nbtData.getAllKeys(item)) {
                 slot.set("Item.Meta.Data." + key, nbtData.getNBT(item, key));
             }
