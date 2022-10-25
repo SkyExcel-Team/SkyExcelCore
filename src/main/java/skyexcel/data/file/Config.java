@@ -16,6 +16,7 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
+import skyexcel.data.Item.NBTItem;
 import skyexcel.data.Item.PDCData;
 
 import java.io.File;
@@ -193,7 +194,7 @@ public class Config implements AConfig {
 
     @Override
     public void setLocation(String path, Location value) {
-        getConfig().set(path + ".world", value.getWorld().getName());
+        getConfig().set(path + "." + value.getWorld().getName(), value.getWorld().getName());
         getConfig().set(path + ".x", value.getX());
         getConfig().set(path + ".y", value.getY());
         getConfig().set(path + ".z", value.getZ());
@@ -315,6 +316,10 @@ public class Config implements AConfig {
             if (OpenInv.getTopInventory().equals(inv) && !inv.getType().equals(InventoryType.CRAFTING)) {
                 for (int i = 0; i < inv.getSize(); i++) {
                     ItemStack item = inv.getItem(i);
+                    NBTItem nbtItem = new NBTItem(item);
+                    if (nbtItem.getAllTagKey() != null) { //NBT Item 이 Null이 아닐경우
+
+                    }
                     setString(path + ".inv.title", OpenInv.getTitle());
                     setInteger(path + ".inv.size", inv.getSize());
                     if (item != null) {
@@ -333,6 +338,7 @@ public class Config implements AConfig {
             }
         }
     }
+
 
     private void setItem(String path, ItemStack item, int i, int index) {
         ConfigurationSection slot = getConfig().createSection(path + ".inv.items." + index);
