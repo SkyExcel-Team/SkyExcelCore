@@ -34,9 +34,12 @@ repositories {
     maven { url = 'https://oss.sonatype.org/content/repositories/central' }
 }
 dependencies {
-    compileOnly 'de.tr7zw:item-nbt-api-plugin:2.10.0'
+
     compileOnly("org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT")
     // The Spigot API with no shadowing. Requires the OSS repo.
     compileOnly("org.spigotmc:spigot:1.18.2-R0.1-SNAPSHOT")
     compileOnly fileTree(dir: 'api', include: ['*.jar'])
+}
+jar {
+    destinationDirectory.set(file('D:\\Project\\minecraft\\Commission\\Servers\\1.19.2\\plugins'))
 }

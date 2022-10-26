@@ -1,7 +1,7 @@
 package skyexcel.data.location;
 
 import org.bukkit.Location;
-import skyexcel.data.file.Config;
+import skyexcel.data.file.Yaml;
 
 public class Area {
 
@@ -9,7 +9,7 @@ public class Area {
     private Location pos1;
     private Location pos2;
 
-    private Config config;
+    private Yaml config;
 
     public Area() {
 
@@ -17,14 +17,14 @@ public class Area {
 
     public Area(String name) {
         this.name = name;
-        this.config = new Config(name);
+        this.config = new Yaml(name);
     }
 
     public Area(String name, Location pos1, Location pos2) {
         this.name = name;
         this.pos1 = pos1;
         this.pos2 = pos2;
-        this.config = new Config(name);
+        this.config = new Yaml(name);
     }
 
     public void saveData() {

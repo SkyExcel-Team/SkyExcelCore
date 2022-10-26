@@ -1,19 +1,19 @@
 package skyexcel.data.file.lang;
 
 import org.bukkit.plugin.Plugin;
-import skyexcel.data.file.Config;
+import skyexcel.data.file.Yaml;
 
-public abstract class Lang extends Config {
+public abstract class Lang extends Yaml {
     private String name;
-    private Config config;
+    private Yaml config;
 
     public Lang(String name) {
         super("lang/" + name);
         this.name = name;
-        config = new Config("lang/" + name);
+        config = new Yaml("lang/" + name);
     }
 
-    public static Config getLang(Config config, Plugin plugin) {
+    public static Yaml getLang(Yaml config, Plugin plugin) {
         if (config.getString("lang").equalsIgnoreCase("English")) {
             English english = new English();
             english.setPlugin(plugin);

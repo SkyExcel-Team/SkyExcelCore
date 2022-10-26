@@ -7,12 +7,12 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public class Section implements AConfig {
+public class Section implements Config {
     private ConfigurationSection section;
 
-    private Config config;
+    private Yaml config;
 
-    public Section(Config config) {
+    public Section(Yaml config) {
         this.config = config;
     }
 
@@ -50,7 +50,7 @@ public class Section implements AConfig {
         section.set(path, value);
     }
 
-    @Override
+
     public void setLocation(String path, Location value) {
         section.set(path + ".world", value.getWorld().getName());
         section.set(path + ".x", value.getX());
@@ -61,7 +61,7 @@ public class Section implements AConfig {
 
     }
 
-    @Override
+
     public void setItemStack(String path, ItemStack value) {
         if (value.hasItemMeta()) {
             section.set(path + ".meta.name", value.getItemMeta().getDisplayName());
@@ -75,7 +75,7 @@ public class Section implements AConfig {
         section.set(path + ".amount", value.getAmount());
     }
 
-    @Override
+
     public void setSound(String path, Sound value) {
         section.set(path, value.name());
     }
