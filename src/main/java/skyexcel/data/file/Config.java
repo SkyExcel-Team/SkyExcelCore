@@ -193,7 +193,7 @@ public class Config implements AConfig {
 
     @Override
     public void setLocation(String path, Location value) {
-        getConfig().set(path + "." + value.getWorld().getName(), value.getWorld().getName());
+        getConfig().set(path + ".world" + value.getWorld().getName(), value.getWorld().getName());
         getConfig().set(path + ".x", value.getX());
         getConfig().set(path + ".y", value.getY());
         getConfig().set(path + ".z", value.getZ());
