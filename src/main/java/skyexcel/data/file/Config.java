@@ -16,7 +16,6 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
-import skyexcel.data.Item.NBTItem;
 import skyexcel.data.Item.PDCData;
 
 import java.io.File;
@@ -316,10 +315,7 @@ public class Config implements AConfig {
             if (OpenInv.getTopInventory().equals(inv) && !inv.getType().equals(InventoryType.CRAFTING)) {
                 for (int i = 0; i < inv.getSize(); i++) {
                     ItemStack item = inv.getItem(i);
-                    NBTItem nbtItem = new NBTItem(item);
-                    if (nbtItem.getAllTagKey() != null) { //NBT Item 이 Null이 아닐경우
 
-                    }
                     setString(path + ".inv.title", OpenInv.getTitle());
                     setInteger(path + ".inv.size", inv.getSize());
                     if (item != null) {
