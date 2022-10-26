@@ -397,7 +397,7 @@ public class Config implements AConfig {
 
     public Location getLocation(String path) {
         if (getConfig().get(path) != null) {
-            return new Location(Bukkit.getWorld(getString(path + ".world")),
+            return new Location(Bukkit.getWorld(getString("world." + path)),
                     getDouble(path + ".x"), getDouble(path + ".y"), getDouble(path + ".z"), (float) getDouble(path + ".yaw"), (float) getDouble(path + ".pitch"));
 
         }
