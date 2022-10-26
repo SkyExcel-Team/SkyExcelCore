@@ -227,34 +227,7 @@ public class Yaml implements Config {
     }
 
 
-    public void setItemStack(String path, ItemStack value) {
-        if (value.hasItemMeta()) {
-            getConfig().set(path + ".meta.name", value.getItemMeta().getDisplayName());
-            getConfig().set(path + ".meta.lore", value.getItemMeta().getLore());
-            if (value.getItemMeta().hasCustomModelData()) {
-                getConfig().set(path + ".meta.CustomModelData", value.getItemMeta().getCustomModelData());
-            }
-        }
-        getConfig().set(path + ".type", value.getType().name());
-        getConfig().set(path + ".amount", value.getAmount());
 
-        saveConfig();
-    }
-
-    public List<ItemStack> addItemStack(String path, ItemStack stack) {
-        List<ItemStack> items;
-        if (getConfig().get(path) == null) {
-            newArrayList(path);
-            items = (List<ItemStack>) getConfig().getList(path);
-            items.add(stack);
-
-        } else {
-            items = (List<ItemStack>) getConfig().getList(path);
-            items.add(stack);
-        }
-        saveConfig();
-        return items;
-    }
 
 
     public Sound getSound(String path) {

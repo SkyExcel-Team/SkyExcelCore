@@ -22,6 +22,7 @@ public class GUI implements Config {
 
     public GUI(Yaml yaml) {
         this.yaml = yaml;
+        Objects.requireNonNull(yaml,"YAML 클래스를 찾을 수 없습니다! #GUI 구조체 ");
     }
 
 
@@ -52,6 +53,20 @@ public class GUI implements Config {
         yaml.saveConfig();
     }
 
+    public List<ItemStack> addItemStack(String path, ItemStack stack) {
+        List<ItemStack> items;
+        if (yaml.getConfig().get(path) == null) {
+            yaml.newArrayList(path);
+            items = (List<ItemStack>) yaml.getConfig().getList(path);
+            items.add(stack);
+
+        } else {
+            items = (List<ItemStack>) yaml.getConfig().getList(path);
+            items.add(stack);
+        }
+        yaml.saveConfig();
+        return items;
+    }
 
     public void setItemStack(String path, ItemStack item, int i, int index) {
         section = yaml.getConfig().createSection(path + ".inv.items." + index);

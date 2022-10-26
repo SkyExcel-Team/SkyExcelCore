@@ -40,6 +40,3 @@ dependencies {
     compileOnly("org.spigotmc:spigot:1.18.2-R0.1-SNAPSHOT")
     compileOnly fileTree(dir: 'api', include: ['*.jar'])
 }
-jar {
-    destinationDirectory.set(file('D:\\Project\\minecraft\\Commission\\Servers\\1.19.2\\plugins'))
-}
