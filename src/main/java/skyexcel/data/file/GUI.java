@@ -25,6 +25,10 @@ public class GUI implements DefaultConfig {
         Objects.requireNonNull(yaml, "YAML 클래스를 찾을 수 없습니다! #GUI 구조체 ");
     }
 
+    public GUI path(String path) {
+        section = yaml.getConfig().getConfigurationSection(path);
+        return this;
+    }
 
     public void saveInventory(String path, Inventory inv) {
         for (HumanEntity viewers : inv.getViewers()) {
@@ -35,14 +39,8 @@ public class GUI implements DefaultConfig {
 
                     yaml.setString(path + ".inv.title", OpenInv.getTitle());
                     yaml.setInteger(path + ".inv.size", inv.getSize());
-
                     if (item != null) {
-                        if (yaml.getConfig().get(path + ".inv.items") == null) {
-                            setItemStack(path, item, i, 0);
-
-                        } else {
-                            setItemStack(path, item, i, i);
-                        }
+                        setItemStack(path, item, i, i);
                     } else {
                         yaml.getConfig().set(path + ".inv.items." + i, null);
                     }
@@ -69,20 +67,20 @@ public class GUI implements DefaultConfig {
 
     public void setItemStack(String path, ItemStack item, int i, int index) {
         section = yaml.getConfig().createSection(path + ".inv.items." + index);
+        setItemStack(path, item);
 
         section.set("slot", i);
-        section.set("Material", item.getType().name());
-        section.set("Amount", item.getAmount());
-        section.set("Durability", item.getDurability());
-
-        setItemStack("", item);
-        ItemMeta meta = item.getItemMeta();
-        if (item.hasItemMeta()) {
-            section.set("Meta.display-name", meta.getDisplayName());
-            section.set("Meta.lore", meta.getLore());
-
-        }
-        section.set("data", item.getDurability());
+//        section.set("Material", item.getType().name());
+//        section.set("Amount", item.getAmount());
+//        section.set("Durability", item.getDurability());
+//
+//        ItemMeta meta = item.getItemMeta();
+//        if (item.hasItemMeta()) {
+//            section.set("Meta.display-name", meta.getDisplayName());
+//            section.set("Meta.lore", meta.getLore());
+//
+//        }
+//        section.set("data", item.getDurability());
 
     }
 
@@ -129,8 +127,6 @@ public class GUI implements DefaultConfig {
             }
             if (meta.hasEnchants()) {
                 Map<Enchantment, Integer> enchants = meta.getEnchants();
-                Object[][] Map = {};
-
                 for (Enchantment enchantment : enchants.keySet()) {
                     int level = enchants.get(enchantment);
                     section.set("Enchant." + enchantment.getName(), level);
