@@ -7,12 +7,12 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public class Section implements Config {
+public class Section implements DefaultConfig {
     private ConfigurationSection section;
 
-    private Yaml config;
+    private Config config;
 
-    public Section(Yaml config) {
+    public Section(Config config) {
         this.config = config;
     }
 

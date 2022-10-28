@@ -15,16 +15,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class GUI implements Config {
+public class GUI implements DefaultConfig {
 
     private ConfigurationSection section;
-    private Yaml yaml;
+    private Config yaml;
 
-    public GUI(Yaml yaml) {
+    public GUI(Config yaml) {
         this.yaml = yaml;
-        Objects.requireNonNull(yaml,"YAML 클래스를 찾을 수 없습니다! #GUI 구조체 ");
+        Objects.requireNonNull(yaml, "YAML 클래스를 찾을 수 없습니다! #GUI 구조체 ");
     }
-
 
 
     public void saveInventory(String path, Inventory inv) {
@@ -134,7 +133,7 @@ public class GUI implements Config {
 
                 for (Enchantment enchantment : enchants.keySet()) {
                     int level = enchants.get(enchantment);
-                    section.set("Enchant." + enchantment.getName(), enchantment.getName());
+                    section.set("Enchant." + enchantment.getName(), level);
 
                 }
             }
