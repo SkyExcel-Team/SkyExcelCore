@@ -9,12 +9,12 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.util.FileUtil;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -113,6 +113,17 @@ public class Config implements DefaultConfig {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public boolean CopyFile(String newPath) {
+        if (this.config == null || this.file == null) return false;
+
+        File newFile = new File(plugin.getDataFolder(), newPath);
+
+        FileUtil.copy(file, newFile);
+        plugin.saveResource(newFile.getPath(),false);
+
+        return FileUtil.copy(file, newFile);
     }
 
     public void loadDefaultPluginConfig() {
