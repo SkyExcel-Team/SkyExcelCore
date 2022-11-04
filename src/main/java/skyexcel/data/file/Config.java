@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings("all")
 public class Config implements DefaultConfig {
@@ -178,6 +179,28 @@ public class Config implements DefaultConfig {
 
     }
 
+    /**
+     * 확률을 백분율 형태로 저장 할 수 있습니다.
+     *
+     * @param path    저장할 곳
+     * @param percent 백분율 ex) 100, 50%, 23%
+     */
+    public void setPercent(String path, double percent) {
+        setDouble(path, percent);
+    }
+
+
+    /***
+     *  이 함수는, 퍼센트를 불러와, 해당 확률을 실행 시킨 후, True 일때 작동하는 함수 입니다.
+     * @return 확률 통과 여부
+     */
+    public boolean getPercent(String path) {
+        double percent = getDouble(path);
+        double result = (double) percent / (double) 100 * 100.0;
+        int rand = new Random().nextInt(100) + 1;
+        return rand <= result;
+    }
+
     public void setLocation(String path, Location value) {
         getConfig().set(path + ".world", value.getWorld().getName());
         getConfig().set(path + ".x", value.getX());
@@ -249,7 +272,11 @@ public class Config implements DefaultConfig {
 
     @Override
     public long getLong(String path) {
-        return 0;
+        if (config.get(path) != null) {
+            Long value = config.getLong(path);
+            return value != null ? value : -1;
+        }
+        return -1;
     }
 
     @Override

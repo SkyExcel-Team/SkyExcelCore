@@ -8,7 +8,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
 
 
 import javax.annotation.Nullable;
@@ -26,7 +25,7 @@ public class PDCData {
         this.plugin = plugin;
     }
 
-    public @Nullable String getNBT(@NotNull ItemStack item, String key) {
+    public @Nullable String getNBT(ItemStack item, String key) {
         Objects.requireNonNull(item, "item must not be null");
         if (!item.hasItemMeta()) return null;
         ItemMeta meta = item.getItemMeta();
@@ -38,7 +37,7 @@ public class PDCData {
         return null;
     }
 
-    public @Nullable String getNBT(@NotNull Entity entity, String key) {
+    public @Nullable String getNBT(Entity entity, String key) {
         Objects.requireNonNull(entity, "entity must not be null");
         PersistentDataContainer pdc = entity.getPersistentDataContainer();
         NamespacedKey namespacedKey = new NamespacedKey(plugin, key);
@@ -48,7 +47,7 @@ public class PDCData {
         return null;
     }
 
-    public void addNBT(@NotNull ItemStack item, String key, String value) {
+    public void setString(ItemStack item, String key, String value) {
         Objects.requireNonNull(item, "item must not be null");
         ItemMeta meta = item.hasItemMeta() ? item.getItemMeta() : Bukkit.getItemFactory().getItemMeta(item.getType());
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
@@ -57,14 +56,44 @@ public class PDCData {
         item.setItemMeta(meta);
     }
 
-    public void addNBT(@NotNull Entity entity, String key, String value) {
+    public void setByte(ItemStack item, String key, Byte value) {
+        Objects.requireNonNull(item, "item must not be null");
+        ItemMeta meta = item.hasItemMeta() ? item.getItemMeta() : Bukkit.getItemFactory().getItemMeta(item.getType());
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+        NamespacedKey namespacedKey = new NamespacedKey(plugin, key);
+        pdc.set(namespacedKey, PersistentDataType.BYTE, value);
+        item.setItemMeta(meta);
+    }
+
+
+    public void setByte(ItemStack item, String key, byte[] value) {
+        Objects.requireNonNull(item, "item must not be null");
+        ItemMeta meta = item.hasItemMeta() ? item.getItemMeta() : Bukkit.getItemFactory().getItemMeta(item.getType());
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+        NamespacedKey namespacedKey = new NamespacedKey(plugin, key);
+        pdc.set(namespacedKey, PersistentDataType.BYTE_ARRAY, value);
+        item.setItemMeta(meta);
+    }
+
+    public void setDouble(ItemStack item, String key, double value) {
+        Objects.requireNonNull(item, "item must not be null");
+        ItemMeta meta = item.hasItemMeta() ? item.getItemMeta() : Bukkit.getItemFactory().getItemMeta(item.getType());
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+        NamespacedKey namespacedKey = new NamespacedKey(plugin, key);
+        pdc.set(namespacedKey, PersistentDataType.DOUBLE, value);
+
+        item.setItemMeta(meta);
+    }
+
+
+    public void addNBT(Entity entity, String key, String value) {
         Objects.requireNonNull(entity, "entity must not be null");
         PersistentDataContainer pdc = entity.getPersistentDataContainer();
         NamespacedKey namespacedKey = new NamespacedKey(plugin, key);
         pdc.set(namespacedKey, PersistentDataType.STRING, value);
     }
 
-    public boolean hasNBT(@NotNull ItemStack item, String key) {
+    public boolean hasNBT(ItemStack item, String key) {
         Objects.requireNonNull(item, "item must not be null");
         if (!item.hasItemMeta()) return false;
         ItemMeta meta = item.getItemMeta();
@@ -72,13 +101,13 @@ public class PDCData {
         return pdc.has(new NamespacedKey(plugin, key), PersistentDataType.STRING);
     }
 
-    public boolean hasNBT(@NotNull Entity entity, String key) {
+    public boolean hasNBT(Entity entity, String key) {
         Objects.requireNonNull(entity, "entity must not be null");
         PersistentDataContainer pdc = entity.getPersistentDataContainer();
         return pdc.has(new NamespacedKey(plugin, key), PersistentDataType.STRING);
     }
 
-    public void removeNBT(@NotNull ItemStack item, String key) {
+    public void removeNBT(ItemStack item, String key) {
         Objects.requireNonNull(item, "item must not be null");
         if (!item.hasItemMeta()) return;
         ItemMeta meta = item.getItemMeta();
@@ -87,13 +116,13 @@ public class PDCData {
         item.setItemMeta(meta);
     }
 
-    public void removeNBT(@NotNull Entity entity, String key) {
+    public void removeNBT(Entity entity, String key) {
         Objects.requireNonNull(entity, "entity must not be null");
         PersistentDataContainer pdc = entity.getPersistentDataContainer();
         pdc.remove(new NamespacedKey(plugin, key));
     }
 
-    public HashMap<String, String> getAllValues(@NotNull ItemStack item) {
+    public HashMap<String, String> getAllValues(ItemStack item) {
         Objects.requireNonNull(item, "item must not be null");
         HashMap<String, String> map = new HashMap<>();
         if (!item.hasItemMeta()) return map;
@@ -105,7 +134,7 @@ public class PDCData {
         return map;
     }
 
-    public List<String> getAllKeys(@NotNull ItemStack item) {
+    public List<String> getAllKeys(ItemStack item) {
         Objects.requireNonNull(item, "item must not be null");
         List<String> keys = new ArrayList<>();
         if (!item.hasItemMeta()) return null;

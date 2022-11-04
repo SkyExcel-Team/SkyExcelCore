@@ -1,14 +1,14 @@
 package skyexcel.command.tab;
 
-import org.apache.commons.lang.ArrayUtils;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandException;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
 
 import java.util.*;
 
@@ -30,13 +30,13 @@ public class Tab implements TabCompleter {
 
 
     public Tab(Plugin plugin, String label) {
-        Objects.requireNonNull(plugin.getServer().getPluginCommand(label)).setTabCompleter(this);
+        Objects.requireNonNull(plugin.getServer().getPluginCommand("")).setTabCompleter(this);
 
     }
 
 
     public Tab(String label) {
-        Objects.requireNonNull(Bukkit.getServer().getPluginCommand(label)).setTabCompleter(this);
+        Objects.requireNonNull(Bukkit.getServer().getPluginCommand("")).setTabCompleter(this);
 
     }
 
@@ -56,6 +56,9 @@ public class Tab implements TabCompleter {
 
         }
     }
+
+
+
 
     public static class Args {
 
@@ -122,9 +125,9 @@ public class Tab implements TabCompleter {
         }
     }
 
-    @Nullable
+
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public List<String> onTabComplete(CommandSender sender, Command command,  String label,  String[] args) {
         List<String> result = new ArrayList<String>();
 
         try {

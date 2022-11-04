@@ -4,7 +4,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
+
 
 import java.util.Objects;
 
@@ -18,9 +18,9 @@ public abstract class MainCmd implements CommandExecutor, Function {
 
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (label.equalsIgnoreCase(label))
-            runCmd(sender,label, args);
+            runCmd(sender, label, args);
         return false;
     }
 

@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.InventoryView;
-import org.jetbrains.annotations.NotNull;
 
 public class InventoryUtil implements InventoryHolder {
 
@@ -49,7 +48,6 @@ public class InventoryUtil implements InventoryHolder {
         return title;
     }
 
-    @NotNull
     @Override
     public Inventory getInventory() {
         return inv;
