@@ -2,6 +2,7 @@ package skyexcel.data.file;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.HumanEntity;
@@ -12,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import skyexcel.data.Item.PDCData;
 
 import java.util.HashMap;
@@ -29,6 +31,8 @@ public class GUI implements DefaultConfig {
      * 다른 데이터를 저장할 공간.
      */
     private ConfigurationSection data;
+
+    private ItemStack item;
     private final Config yaml;
 
     public GUI(Config yaml) {
@@ -55,14 +59,6 @@ public class GUI implements DefaultConfig {
 
                 if (this.section != null) {
                     Map<String, Object> objectMap = new HashMap<>();
-
-//                    if (this.section.get("data") != null) {
-//                        ConfigurationSection data = section.getConfigurationSection("data");
-//                        for (String key : data.getKeys(false)) {
-//                            objectMap.put(key, data.get(key));
-//                        }
-//                    }
-
                     ConfigurationSection newSection = yaml.getConfig().createSection(path + ".inv.items");
 
                     if (objectMap != null) {
@@ -86,6 +82,15 @@ public class GUI implements DefaultConfig {
         yaml.saveConfig();
     }
 
+
+    /**
+     * 데이터를 저장할 아이템을 설정 해 주는 메소드 입니다.
+     *
+     * @param item
+     */
+    public void setItem(ItemStack item) {
+        this.item = item;
+    }
 
     public List<ItemStack> addItemStack(String path, ItemStack stack) {
         List<ItemStack> items;
@@ -113,14 +118,26 @@ public class GUI implements DefaultConfig {
     public void setInteger(String path, int value) {
         Objects.requireNonNull(section, "section 변수가 없습니다! 확인해 주세요! 에러가 발생된 메소드 : #setInteger, section=?");
         section.set("data." + path, value);
+
         yaml.saveConfig();
+
+        if (item != null) {
+            ItemMeta meta = item.getItemMeta();
+            PersistentDataContainer pdc = item.getItemMeta().getPersistentDataContainer();
+            NamespacedKey namespacedKey = new NamespacedKey(yaml.getPlugin(), path);
+            pdc.set(namespacedKey, PersistentDataType.INTEGER, value);
+            item.setItemMeta(meta);
+        }
+
     }
 
     @Override
     public void setBoolean(String path, boolean value) {
         Objects.requireNonNull(section, "section 변수가 없습니다! 확인해 주세요! 에러가 발생된 메소드 : #setBoolean, section=?");
         section.set("data." + path, value);
+
         yaml.saveConfig();
+        persistentdataSet(path, PersistentDataType.STRING, value ? "true" : "false");
     }
 
     @Override
@@ -128,6 +145,7 @@ public class GUI implements DefaultConfig {
         Objects.requireNonNull(section, "section 변수가 없습니다! 확인해 주세요! 에러가 발생된 메소드 : #setString, section=?");
         section.set("data." + path, value);
         yaml.saveConfig();
+        persistentdataSet(path, PersistentDataType.STRING, value);
     }
 
     @Override
@@ -135,6 +153,7 @@ public class GUI implements DefaultConfig {
         Objects.requireNonNull(section, "section 변수가 없습니다! 확인해 주세요! 에러가 발생된 메소드 : #setDouble, section=?");
         section.set("data." + path, value);
         yaml.saveConfig();
+        persistentdataSet(path, PersistentDataType.DOUBLE, value);
     }
 
     public void setItemStack(String path, ItemStack value) {
@@ -144,9 +163,12 @@ public class GUI implements DefaultConfig {
         section.set("Amount", value.getAmount());
         section.set("Durability", value.getDurability());
 
-        if (section.get("data") != null) {
-            ConfigurationSection data = section.getConfigurationSection("data");
-            System.out.println("섹스다병신아");
+        PDCData data = new PDCData(yaml.getPlugin());
+
+        if (!data.getAllKeys(value).isEmpty()) {
+            for (String key : data.getAllKeys(value)) {
+
+            }
         }
 
         if (!value.getType().equals(Material.ENCHANTED_BOOK)) {
@@ -189,6 +211,7 @@ public class GUI implements DefaultConfig {
         section.set("data." + path, value);
 
         yaml.saveConfig();
+        persistentdataSet(path, PersistentDataType.LONG, value);
     }
 
     @Override
@@ -196,6 +219,7 @@ public class GUI implements DefaultConfig {
         Objects.requireNonNull(section, "section 변수가 없습니다! 확인해 주세요! 에러가 발생된 메소드 : #setList, section=?");
         section.set("data." + path, value);
         yaml.saveConfig();
+
     }
 
     @Override
@@ -308,6 +332,17 @@ public class GUI implements DefaultConfig {
             return inv;
         }
         return null;
+    }
+
+    private void persistentdataSet(String path, PersistentDataType type, Object obj) {
+
+        if (item != null) {
+            ItemMeta meta = item.getItemMeta();
+            PersistentDataContainer pdc = item.getItemMeta().getPersistentDataContainer();
+            NamespacedKey namespacedKey = new NamespacedKey(yaml.getPlugin(), path);
+            pdc.set(namespacedKey, type, obj);
+            item.setItemMeta(meta);
+        }
     }
 
 
