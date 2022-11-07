@@ -41,6 +41,7 @@ table = new DataTable(0, 0);
         });
 
 ```
+보다 편하게 상점 데이터를 처리 할 수 있습니다! 
  
 ```java
 public class CashShop extends Stockable {
@@ -52,4 +53,8 @@ public class CashShop extends Stockable {
 }
 ```
 
+```java
+String path = "shop/cash";
+CashShop shop = new CashShop(path, name);
+```
 ---
