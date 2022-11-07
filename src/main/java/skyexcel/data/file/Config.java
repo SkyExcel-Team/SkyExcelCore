@@ -9,6 +9,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.FileUtil;
 
 import java.io.*;
@@ -25,13 +26,13 @@ public class Config implements DefaultConfig {
     private String name;
     private ConfigurationSection section;
 
-    private Plugin plugin;
+    private JavaPlugin plugin;
 
     public Config(String name) {
         this.name = name;
     }
 
-    public void setPlugin(Plugin plugin) {
+    public void setPlugin(JavaPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -121,7 +122,7 @@ public class Config implements DefaultConfig {
         File newFile = new File(plugin.getDataFolder(), newPath);
 
         FileUtil.copy(file, newFile);
-        plugin.saveResource(newFile.getPath(),false);
+        plugin.saveResource(newFile.getPath(), false);
 
         return FileUtil.copy(file, newFile);
     }

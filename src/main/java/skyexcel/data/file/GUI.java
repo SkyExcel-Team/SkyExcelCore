@@ -41,7 +41,12 @@ public class GUI implements DefaultConfig {
     }
 
     public GUI path(String path) {
-        section = yaml.getConfig().getConfigurationSection(path);
+        if (yaml.getConfig().get(path) != null) {
+            section = yaml.getConfig().getConfigurationSection(path);
+        } else {
+            section = yaml.getConfig().createSection(path);
+        }
+
 
         return this;
     }
@@ -76,7 +81,6 @@ public class GUI implements DefaultConfig {
                         setItemStack(path, item, i, i);
                     }
                 }
-
             }
         }
         yaml.saveConfig();
@@ -272,6 +276,7 @@ public class GUI implements DefaultConfig {
         return (short) section.get("data." + path);
     }
 
+
     public Inventory getInventory(String path) {
 
         if (yaml.getConfig().get(path + ".inv.size") != null && yaml.getConfig().get(path + ".inv.title") != null) {
@@ -333,6 +338,11 @@ public class GUI implements DefaultConfig {
         }
         return null;
     }
+
+//    public ItemStack getItemStack(String path) {
+//
+//    }
+
 
     private void persistentdataSet(String path, PersistentDataType type, Object obj) {
 

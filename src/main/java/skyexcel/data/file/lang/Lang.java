@@ -1,6 +1,7 @@
 package skyexcel.data.file.lang;
 
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 import skyexcel.data.file.Config;
 
 public abstract class Lang extends Config {
@@ -13,7 +14,7 @@ public abstract class Lang extends Config {
         config = new Config("lang/" + name);
     }
 
-    public static Config getLang(Config config, Plugin plugin) {
+    public static Config getLang(Config config, JavaPlugin plugin) {
         if (config.getString("lang").equalsIgnoreCase("English")) {
             English english = new English();
             english.setPlugin(plugin);
