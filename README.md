@@ -42,5 +42,14 @@ table = new DataTable(0, 0);
 
 ```
  
+```java
+public class CashShop extends Stockable {
+
+
+    public CashShop(String path, String name) {
+        super(path, name);
+    }
+}
+```
 
 ---
