@@ -38,11 +38,13 @@ public abstract class Flowable {
         return false;
     }
 
-    public void withdraw(long amount) {
+    public boolean withdraw(long amount) {
         long result = getAmount() - amount;
         if (result > 0) {
             setAmount(getAmount() - amount);
+            return true;
         }
+        return false;
     }
 
     public void setAmount(long amount) {
