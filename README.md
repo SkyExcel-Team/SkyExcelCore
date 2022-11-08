@@ -58,12 +58,14 @@ String path = "shop/cash";
 CashShop shop = new CashShop(path, name);
 ```
 유동 변수를 편하게 만들 수 있습니다. 
+이제 유동 변수의 이름을 정할 수 있습니다!
+
 ```java
 public class Cash extends Flowable {
 
     public Cash(OfflinePlayer player, String path) {
         super(player, path);
-
+        setValuePath("cash");
     }
 }
 ```
