@@ -55,4 +55,8 @@ public abstract class Stockable {
     public Inventory getInv() {
         return inv;
     }
+
+    public GUI getGui() {
+        return gui;
+    }
 }
