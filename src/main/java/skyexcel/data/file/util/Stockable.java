@@ -48,13 +48,7 @@ public abstract class Stockable {
         gui.saveInventory(name, inv);
     }
 
-    public void editGUI() {
-        Inventory inv = Bukkit.createInventory(null, 27, "마일리지");
-    }
-
-
     public boolean delete() {
         return config.delete();
     }
-
 }
