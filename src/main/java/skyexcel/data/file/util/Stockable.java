@@ -3,7 +3,6 @@ package skyexcel.data.file.util;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import skyexcel.data.file.Config;
 import skyexcel.data.file.GUI;
@@ -16,14 +15,8 @@ public abstract class Stockable {
 
     private GUI gui;
 
-    private int slot;
-
-    private ItemStack itemStack;
 
     private Inventory inv;
-
-    private SetType type = SetType.BUY;
-
 
     public Stockable(String path, String name, JavaPlugin plugin) {
         this.name = name;
@@ -51,19 +44,8 @@ public abstract class Stockable {
         gui.saveInventory(name, inv);
     }
 
-
     public void save(Inventory inv) {
         gui.saveInventory(name, inv);
-    }
-
-
-    public void setType(SetType type) {
-        this.type = type;
-    }
-
-    public void setItemStack(ItemStack itemStack) {
-        this.itemStack = itemStack;
-        System.out.println(itemStack);
     }
 
     public void editGUI() {
@@ -71,35 +53,8 @@ public abstract class Stockable {
     }
 
 
-    public void setSlot(int slot) {
-        this.slot = slot;
+    public boolean delete() {
+        return config.delete();
     }
 
-    public void setBuy(int amount) {
-        gui.setItem(itemStack);
-        gui.setInteger("buy", amount);
-    }
-
-    public void setSell(int amount) {
-        gui.setItem(itemStack);
-        gui.setInteger("sell", amount);
-    }
-
-    public void delete(Player player) {
-        config.renameFile("trash/" + name);
-        config.saveConfig();
-        config.delete();
-    }
-
-    public SetType getType() {
-        return type;
-    }
-
-    public Inventory getInv() {
-        return inv;
-    }
-
-    public enum SetType {
-        BUY, SELL, CLOSE
-    }
 }
