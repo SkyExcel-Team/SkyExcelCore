@@ -51,4 +51,8 @@ public abstract class Stockable {
     public boolean delete() {
         return config.delete();
     }
+
+    public Inventory getInv() {
+        return inv;
+    }
 }
