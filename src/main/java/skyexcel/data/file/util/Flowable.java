@@ -38,14 +38,12 @@ public abstract class Flowable {
     }
 
     public boolean sub(double amount) {
-        if (getLong() != -1) {
-            double result = getDouble() + amount;
-            setAmount(result);
-            return true;
-        } else {
-            setAmount(amount);
+        double result = getDouble() - amount;
+        if (result > 0) {
+            setAmount(getDouble() - amount);
             return true;
         }
+        return false;
     }
 
     public boolean add(long amount) {
@@ -60,14 +58,12 @@ public abstract class Flowable {
     }
 
     public boolean sub(long amount) {
-        if (getLong() != -1) {
-            long result = getLong() + amount;
-            setAmount(result);
-            return true;
-        } else {
-            setAmount(amount);
+        long result = getLong() - amount;
+        if (result > 0) {
+            setAmount(getLong() - amount);
             return true;
         }
+        return false;
     }
 
 
