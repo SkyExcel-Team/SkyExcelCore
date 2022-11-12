@@ -26,26 +26,77 @@ public abstract class Flowable {
         this.valuePath = valuePath;
     }
 
-    public boolean deposit(long amount) {
-
-        if (getAmount() != -1) {
-            long result = getAmount() + amount;
+    public boolean add(double amount) {
+        if (getDouble() != -1) {
+            double result = getDouble() + amount;
             setAmount(result);
+            return true;
         } else {
             setAmount(amount);
+            return true;
         }
+    }
 
-        return false;
+    public boolean sub(double amount) {
+        if (getLong() != -1) {
+            double result = getDouble() + amount;
+            setAmount(result);
+            return true;
+        } else {
+            setAmount(amount);
+            return true;
+        }
+    }
+
+    public boolean add(long amount) {
+        if (getLong() != -1) {
+            long result = getLong() + amount;
+            setAmount(result);
+            return true;
+        } else {
+            setAmount(amount);
+            return true;
+        }
+    }
+
+    public boolean sub(long amount) {
+        if (getLong() != -1) {
+            long result = getLong() + amount;
+            setAmount(result);
+            return true;
+        } else {
+            setAmount(amount);
+            return true;
+        }
+    }
+
+
+    public boolean deposit(long amount) {
+        if (getLong() != -1) {
+            long result = getLong() + amount;
+            setAmount(result);
+            return true;
+        } else {
+            setAmount(amount);
+            return true;
+        }
     }
 
     public boolean withdraw(long amount) {
-        long result = getAmount() - amount;
+        long result = getLong() - amount;
         if (result > 0) {
-            setAmount(getAmount() - amount);
+            setAmount(getLong() - amount);
             return true;
         }
         return false;
     }
+
+
+    public void setAmount(double amount) {
+        config.getConfig().set(valuePath, amount);
+        config.saveConfig();
+    }
+
 
     public void setAmount(long amount) {
 
@@ -53,7 +104,11 @@ public abstract class Flowable {
         config.saveConfig();
     }
 
-    public long getAmount() {
+    public double getDouble() {
+        return (config.getConfig().get(valuePath) != null ? config.getConfig().getLong(valuePath) : -1);
+    }
+
+    public long getLong() {
         return (config.getConfig().get(valuePath) != null ? config.getConfig().getLong(valuePath) : -1);
     }
 }
