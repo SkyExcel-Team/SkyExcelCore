@@ -101,7 +101,7 @@ public abstract class Flowable {
     }
 
     public double getDouble() {
-        return (config.getConfig().get(valuePath) != null ? config.getConfig().getLong(valuePath) : -1);
+        return (config.getConfig().get(valuePath) != null ? config.getConfig().getDouble(valuePath) : -1);
     }
 
     public long getLong() {

@@ -59,4 +59,8 @@ public abstract class Stockable {
     public GUI getGui() {
         return gui;
     }
+
+    public Config getConfig() {
+        return config;
+    }
 }

@@ -14,12 +14,8 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import skyexcel.data.Item.PDCData;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @SuppressWarnings("all")
 public class GUI implements DefaultConfig {
@@ -47,12 +43,11 @@ public class GUI implements DefaultConfig {
             section = yaml.getConfig().createSection(path);
         }
 
-
         return this;
     }
 
     public void saveInventory(String path, Inventory inv) {
-
+        System.out.println("namespacedKey");
         for (HumanEntity viewers : inv.getViewers()) {
             InventoryView OpenInv = viewers.getOpenInventory();
             if (OpenInv.getTopInventory().equals(inv) && !inv.getType().equals(InventoryType.CRAFTING)) {
@@ -60,24 +55,43 @@ public class GUI implements DefaultConfig {
                 yaml.setString(path + ".inv.title", OpenInv.getTitle());
                 yaml.setInteger(path + ".inv.size", inv.getSize());
 
-                //TODO 데이터 저장 newSection을 하기 전에, 기존에 데이터 값이 있으면, 저장 후, 해당 슬롯으로 해당 값을 옮김.
 
-                if (this.section != null) {
-                    Map<String, Object> objectMap = new HashMap<>();
-                    ConfigurationSection newSection = yaml.getConfig().createSection(path + ".inv.items");
-
-                    if (objectMap != null) {
-                        ConfigurationSection data = newSection.createSection(path + ".data");
-                        for (String key : objectMap.keySet()) {
-                            data.set(key, objectMap.get(key));
-                        }
-                    }
-                }
-                ConfigurationSection newSection = yaml.getConfig().createSection(path + ".inv.items");
+                //TODO 저장 방식
+                // 아이템 리스트 초기화 전에 아이템에 데이터가 있으면, 해당 리스트에 아이템이 정보와 함께 저장이 된다.
+                // 이 후, 다시 아이템을 불러올 때에 해당 리스트를 통해 불러온다.
+                List<ItemStack> itemStacks = new ArrayList<>();
 
                 for (int i = 0; i < inv.getSize(); i++) {
                     ItemStack item = inv.getItem(i);
                     if (item != null) {
+                        if (yaml.getConfig().get(path + ".inv.items." + i + ".data") != null) {
+                            ConfigurationSection data = yaml.getConfig().getConfigurationSection(path + ".inv.items." + i + ".data");
+
+                            for (String key : data.getKeys(false)) {
+                                ItemMeta meta = item.getItemMeta();
+                                PersistentDataContainer pdc = meta.getPersistentDataContainer();
+                                NamespacedKey namespacedKey = new NamespacedKey(yaml.getPlugin(), key);
+
+                                if (pdc.has(namespacedKey, PersistentDataType.LONG)) {
+                                    pdc.set(namespacedKey, PersistentDataType.LONG, data.getLong(key));
+                                    item.setItemMeta(meta);
+                                    itemStacks.add(item);
+                                }
+
+                            }
+                        }
+                    }
+                }
+
+                ConfigurationSection newSection = yaml.getConfig().createSection(path + ".inv.items");
+
+                List<ItemStack> items = new ArrayList<>();
+
+                for (int i = 0; i < inv.getSize(); i++) {
+                    ItemStack item = inv.getItem(i);
+
+                    if (item != null) {
+                        items.add(item);
                         setItemStack(path, item, i, i);
                     }
                 }
@@ -86,6 +100,71 @@ public class GUI implements DefaultConfig {
         yaml.saveConfig();
     }
 
+    public void setItemStack(String path, ItemStack item, int i, int index) {
+        section = yaml.getConfig().createSection(path + ".inv.items." + index);
+        section.set("slot", i);
+        setItemStack(path, item);
+    }
+
+
+    public void setItemStack(String path, ItemStack value) {
+        Objects.requireNonNull(section, "section 변수가 없습니다! 확인해 주세요! 에러가 발생된 메소드 : #setItemStack, section=?");
+
+        section.set("Material", value.getType().name());
+        section.set("Amount", value.getAmount());
+        section.set("Durability", value.getDurability());
+
+
+//        if (value != null) {
+//            ItemMeta meta = value.getItemMeta();
+//            PersistentDataContainer data = meta.getPersistentDataContainer();
+//            if (data != null) {
+//                for (NamespacedKey key : data.getKeys()) {
+//                    long test = data.get(key, PersistentDataType.LONG);
+//                    section.set("data." + key.getKey(), test);
+//                }
+//            }
+//        }
+
+
+        if (!value.getType().equals(Material.ENCHANTED_BOOK)) {
+            if (value.hasItemMeta()) {
+                ItemMeta meta = value.getItemMeta();
+                assert meta != null;
+                if (meta.hasDisplayName())
+                    section.set("Meta.Display", meta.getDisplayName());
+
+                if (meta.hasCustomModelData())
+                    section.set("Meta.CustomModelData", meta.getCustomModelData());
+
+                if (meta.hasLore()) {
+                    List<String> lore = meta.getLore();
+                    section.set("Meta.Lore", lore);
+
+                }
+                Map<Enchantment, Integer> enchants = meta.getEnchants();
+
+                for (Enchantment enchantment : value.getEnchantments().keySet()) {
+                    int level = enchants.get(enchantment);
+                    section.set("Enchant." + enchantment.getName(), level);
+                }
+            }
+        } else {
+
+
+            EnchantmentStorageMeta enchantMeta = (EnchantmentStorageMeta) value.getItemMeta();
+
+            Map<Enchantment, Integer> enchants = enchantMeta.getStoredEnchants();
+
+            if (enchants != null) {
+                for (Enchantment enchantment : enchants.keySet()) {
+                    int level = enchants.get(enchantment);
+                    section.set("Enchant." + enchantment.getName(), level);
+                }
+            }
+        }
+        yaml.saveConfig();
+    }
 
     /**
      * 데이터를 저장할 아이템을 설정 해 주는 메소드 입니다.
@@ -111,19 +190,13 @@ public class GUI implements DefaultConfig {
         return items;
     }
 
-    public void setItemStack(String path, ItemStack item, int i, int index) {
-        section = yaml.getConfig().createSection(path + ".inv.items." + index);
-        section.set("slot", i);
-        setItemStack(path, item);
-    }
-
 
     @Override
     public void setInteger(String path, int value) {
-        Objects.requireNonNull(section, "section 변수가 없습니다! 확인해 주세요! 에러가 발생된 메소드 : #setInteger, section=?");
-        section.set("data." + path, value);
-
-        yaml.saveConfig();
+//        Objects.requireNonNull(section, "section 변수가 없습니다! 확인해 주세요! 에러가 발생된 메소드 : #setInteger, section=?");
+//        section.set("data." + path, value);
+//
+//        yaml.saveConfig();
 
         if (item != null) {
             ItemMeta meta = item.getItemMeta();
@@ -137,82 +210,34 @@ public class GUI implements DefaultConfig {
 
     @Override
     public void setBoolean(String path, boolean value) {
-        Objects.requireNonNull(section, "section 변수가 없습니다! 확인해 주세요! 에러가 발생된 메소드 : #setBoolean, section=?");
-        section.set("data." + path, value);
-
-        yaml.saveConfig();
+//        Objects.requireNonNull(section, "section 변수가 없습니다! 확인해 주세요! 에러가 발생된 메소드 : #setBoolean, section=?");
+//        section.set("data." + path, value);
+//
+//        yaml.saveConfig();
         persistentdataSet(path, PersistentDataType.STRING, value ? "true" : "false");
     }
 
     @Override
     public void setString(String path, String value) {
-        Objects.requireNonNull(section, "section 변수가 없습니다! 확인해 주세요! 에러가 발생된 메소드 : #setString, section=?");
-        section.set("data." + path, value);
-        yaml.saveConfig();
+//        Objects.requireNonNull(section, "section 변수가 없습니다! 확인해 주세요! 에러가 발생된 메소드 : #setString, section=?");
+//        section.set("data." + path, value);
+//        yaml.saveConfig();
         persistentdataSet(path, PersistentDataType.STRING, value);
     }
 
     @Override
     public void setDouble(String path, double value) {
-        Objects.requireNonNull(section, "section 변수가 없습니다! 확인해 주세요! 에러가 발생된 메소드 : #setDouble, section=?");
-        section.set("data." + path, value);
-        yaml.saveConfig();
+//        Objects.requireNonNull(section, "section 변수가 없습니다! 확인해 주세요! 에러가 발생된 메소드 : #setDouble, section=?");
+//        section.set("data." + path, value);
+//        yaml.saveConfig();
         persistentdataSet(path, PersistentDataType.DOUBLE, value);
     }
 
-    public void setItemStack(String path, ItemStack value) {
-        Objects.requireNonNull(section, "section 변수가 없습니다! 확인해 주세요! 에러가 발생된 메소드 : #setItemStack, section=?");
-
-        section.set("Material", value.getType().name());
-        section.set("Amount", value.getAmount());
-        section.set("Durability", value.getDurability());
-
-        PDCData data = new PDCData(yaml.getPlugin());
-
-        if (!data.getAllKeys(value).isEmpty()) {
-            for (String key : data.getAllKeys(value)) {
-
-            }
-        }
-
-        if (!value.getType().equals(Material.ENCHANTED_BOOK)) {
-            if (value.hasItemMeta()) {
-
-                ItemMeta meta = value.getItemMeta();
-                assert meta != null;
-                if (meta.hasDisplayName())
-                    section.set("Meta.Display", meta.getDisplayName());
-
-                if (meta.hasCustomModelData())
-                    section.set("Meta.CustomModelData", meta.getCustomModelData());
-
-                Map<Enchantment, Integer> enchants = meta.getEnchants();
-
-                for (Enchantment enchantment : value.getEnchantments().keySet()) {
-                    int level = enchants.get(enchantment);
-                    section.set("Enchant." + enchantment.getName(), level);
-                }
-            }
-        } else {
-
-            EnchantmentStorageMeta meta = (EnchantmentStorageMeta) value.getItemMeta();
-
-            Map<Enchantment, Integer> enchants = meta.getStoredEnchants();
-
-            if (enchants != null) {
-                for (Enchantment enchantment : enchants.keySet()) {
-                    int level = enchants.get(enchantment);
-                    section.set("Enchant." + enchantment.getName(), level);
-                }
-            }
-        }
-        yaml.saveConfig();
-    }
 
     @Override
     public void setLong(String path, long value) {
         Objects.requireNonNull(section, "section 변수가 없습니다! 확인해 주세요! 에러가 발생된 메소드 : #setLong, section=?");
-        section.set("data." + path, value);
+        section.set(path, value);
 
         yaml.saveConfig();
         persistentdataSet(path, PersistentDataType.LONG, value);
@@ -276,7 +301,7 @@ public class GUI implements DefaultConfig {
         return (short) section.get("data." + path);
     }
 
-
+    // TODO 인첸트 아이템이 데이터 저장이 안됨. ps. 되긴 함. 불러오질 못함
     public Inventory getInventory(String path) {
 
         if (yaml.getConfig().get(path + ".inv.size") != null && yaml.getConfig().get(path + ".inv.title") != null) {
@@ -284,10 +309,16 @@ public class GUI implements DefaultConfig {
             Inventory inv = Bukkit.createInventory(null, yaml.getInteger(path + ".inv.size"), yaml.getString(path + ".inv.title"));
 
             section = yaml.getConfig().getConfigurationSection(path + ".inv.items");
+            //TODO MetaData 를 저장해야함.
+            ConfigurationSection metaData = section.getConfigurationSection("Meta");
+
 
             for (int i = 0; i < inv.getSize(); i++) {
                 String materialName = section.getString(i + ".Material");
 
+                String displayName = section.getString(i + ".Meta.Display");
+
+                List<String> lore = section.getStringList(i + ".Meta.Lore");
 
                 if (materialName != null) {
 
@@ -297,8 +328,13 @@ public class GUI implements DefaultConfig {
                         int amount = section.getInt(i + ".Amount");
 
                         ItemStack item = new ItemStack(Material.ENCHANTED_BOOK, amount);
-
                         EnchantmentStorageMeta meta = (EnchantmentStorageMeta) item.getItemMeta();
+
+                        if (displayName != null) {
+                            meta.setDisplayName(displayName);
+                        } else if (lore != null) {
+                            meta.setLore(lore);
+                        }
 
                         int durability = section.getInt(i + ".Durability");
 
@@ -310,6 +346,17 @@ public class GUI implements DefaultConfig {
                                 meta.addStoredEnchant(enchantment, section.getInt(key), false);
                             }
                         }
+
+                        ConfigurationSection data = section.getConfigurationSection(i + ".data");
+                        if (data != null) {
+                            PersistentDataContainer pdc = meta.getPersistentDataContainer();
+                            for (String key : data.getKeys(false)) {
+                                long value = data.getLong(key);
+                                NamespacedKey name = new NamespacedKey(yaml.getPlugin(), key);
+                                pdc.set(name, PersistentDataType.LONG, value);
+                            }
+                        }
+
                         item.setItemMeta(meta);
                         inv.setItem(slot, item);
                     } else {
@@ -319,7 +366,22 @@ public class GUI implements DefaultConfig {
                         ItemStack item = new ItemStack(material, amount);
                         ItemMeta meta = item.getItemMeta();
 
+                        if (displayName != null) {
+                            meta.setDisplayName(displayName);
+                        }
+                        meta.setLore(lore);
                         int durability = section.getInt(i + ".Durability");
+
+                        ConfigurationSection data = section.getConfigurationSection(i + ".data");
+                        if (data != null) {
+                            PersistentDataContainer pdc = meta.getPersistentDataContainer();
+                            for (String key : data.getKeys(false)) {
+                                long value = data.getLong(key);
+                                NamespacedKey name = new NamespacedKey(yaml.getPlugin(), key);
+                                pdc.set(name, PersistentDataType.LONG, value);
+                            }
+                        }
+                        item.setItemMeta(meta);
 
                         section = section.getConfigurationSection(i + ".Enchant");
 
@@ -329,6 +391,8 @@ public class GUI implements DefaultConfig {
                                 item.addUnsafeEnchantment(enchantment, section.getInt(key));
                             }
                         }
+
+
                         inv.setItem(slot, item);
                     }
                     section = yaml.getConfig().getConfigurationSection(path + ".inv.items");
