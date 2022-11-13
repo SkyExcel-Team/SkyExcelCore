@@ -66,18 +66,18 @@ public class GUI implements DefaultConfig {
                     if (item != null) {
                         if (yaml.getConfig().get(path + ".inv.items." + i + ".data") != null) {
                             ConfigurationSection data = yaml.getConfig().getConfigurationSection(path + ".inv.items." + i + ".data");
+                            if (data != null) {
+                                for (String key : data.getKeys(false)) {
+                                    ItemMeta meta = item.getItemMeta();
+                                    PersistentDataContainer pdc = meta.getPersistentDataContainer();
+                                    NamespacedKey namespacedKey = new NamespacedKey(yaml.getPlugin(), key);
 
-                            for (String key : data.getKeys(false)) {
-                                ItemMeta meta = item.getItemMeta();
-                                PersistentDataContainer pdc = meta.getPersistentDataContainer();
-                                NamespacedKey namespacedKey = new NamespacedKey(yaml.getPlugin(), key);
-
-                                if (pdc.has(namespacedKey, PersistentDataType.LONG)) {
-                                    pdc.set(namespacedKey, PersistentDataType.LONG, data.getLong(key));
-                                    item.setItemMeta(meta);
-                                    itemStacks.add(item);
+                                    if (pdc.has(namespacedKey, PersistentDataType.LONG)) {
+                                        pdc.set(namespacedKey, PersistentDataType.LONG, data.getLong(key));
+                                        item.setItemMeta(meta);
+                                        itemStacks.add(item);
+                                    }
                                 }
-
                             }
                         }
                     }
@@ -115,16 +115,16 @@ public class GUI implements DefaultConfig {
         section.set("Durability", value.getDurability());
 
 
-//        if (value != null) {
-//            ItemMeta meta = value.getItemMeta();
-//            PersistentDataContainer data = meta.getPersistentDataContainer();
-//            if (data != null) {
-//                for (NamespacedKey key : data.getKeys()) {
-//                    long test = data.get(key, PersistentDataType.LONG);
-//                    section.set("data." + key.getKey(), test);
-//                }
-//            }
-//        }
+        if (value != null) {
+            ItemMeta meta = value.getItemMeta();
+            PersistentDataContainer data = meta.getPersistentDataContainer();
+            if (data != null) {
+                for (NamespacedKey key : data.getKeys()) {
+                    long test = data.get(key, PersistentDataType.LONG);
+                    section.set("data." + key.getKey(), test);
+                }
+            }
+        }
 
 
         if (!value.getType().equals(Material.ENCHANTED_BOOK)) {
