@@ -28,7 +28,6 @@ public abstract class Stockable {
     public void open(Player player) {
         Inventory inv = Bukkit.createInventory(null, 45, name);
         this.inv = inv;
-        player.openInventory(inv);
     }
 
     public void load(Player player) {
