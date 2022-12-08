@@ -39,25 +39,6 @@ public class test{
     }
 }
 ```
-# Command Examples for Java
-
-```java
-       Tab<Object, String> tab = new Tab<>(MiniGame.plugin, label);
-
-        tab.args("생성", "이름");
-        tab.args("랭킹");
-        tab.args("은행", "입금", "[<Integer>]");
-        tab.args("은행", "출금", "[<Integer>]");
-
-        Cmd cmd = new Cmd(MiniGame.plugin, label);
-
-        cmd.action("은행", 0, action -> {
-            Player player = (Player) action.getSender();
-            player.sendMessage("섬 은행 시스템을 열었습니다!");
-        });
-
-```
-
 
 보다 편하게 상점 데이터를 처리 할 수 있습니다! 
  
