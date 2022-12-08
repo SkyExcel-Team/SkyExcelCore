@@ -13,14 +13,6 @@ dependencies {
 
 }
 ```
-# Data Table Exmaples 
-```java
-private DataTable table;
-
-//Column, Row
-table = new DataTable(0, 0);
-```
-
 
 # Config 사용법.
 ```java
@@ -65,6 +57,8 @@ public class test{
         });
 
 ```
+
+
 보다 편하게 상점 데이터를 처리 할 수 있습니다! 
  
 ```java
@@ -81,6 +75,7 @@ public class CashShop extends Stockable {
 String path = "shop/cash";
 CashShop shop = new CashShop(path, name);
 ```
+
 유동 변수를 편하게 만들 수 있습니다. 
 이제 유동 변수의 이름을 정할 수 있습니다!
 
