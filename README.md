@@ -22,6 +22,30 @@ table = new DataTable(0, 0);
 ```
 
 
+# Config 사용법.
+
+public class test{
+
+    public void test(){
+        Config config = new Config("test/test"); // .yml 제외! 
+        config.setPlugin(pluginInstance); //플러그인 경로 등록 
+        
+    }
+}
+
+
+#GUI 사용법.
+
+public class test{
+
+    public void test(Inventory inv){
+        Config config = new Config("test/test"); // .yml 제외! 
+        config.setPlugin(pluginInstance); //플러그인 경로 등록 
+        GUI gui = new GUI(config);
+        gui.saveInventory(path ,inv);
+        gui.getInventory(path); //Null 체크로 예외처리 해야함. 변수로 사용할 
+    }
+}
 
 # Command Examples for Java
 
