@@ -23,7 +23,7 @@ table = new DataTable(0, 0);
 
 
 # Config 사용법.
-
+```java
 public class test{
 
     public void test(){
@@ -32,10 +32,10 @@ public class test{
         
     }
 }
-
+```
 
 #GUI 사용법.
-
+```java
 public class test{
 
     public void test(Inventory inv){
@@ -46,7 +46,7 @@ public class test{
         gui.getInventory(path); //Null 체크로 예외처리 해야함. 변수로 사용할 
     }
 }
-
+```
 # Command Examples for Java
 
 ```java
