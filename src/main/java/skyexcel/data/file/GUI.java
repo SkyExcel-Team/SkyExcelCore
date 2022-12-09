@@ -47,7 +47,6 @@ public class GUI implements DefaultConfig {
     }
 
     public void saveInventory(String path, Inventory inv) {
-        System.out.println("namespacedKey");
         for (HumanEntity viewers : inv.getViewers()) {
             InventoryView OpenInv = viewers.getOpenInventory();
             if (OpenInv.getTopInventory().equals(inv) && !inv.getType().equals(InventoryType.CRAFTING)) {
@@ -55,10 +54,6 @@ public class GUI implements DefaultConfig {
                 yaml.setString(path + ".inv.title", OpenInv.getTitle());
                 yaml.setInteger(path + ".inv.size", inv.getSize());
 
-
-                //TODO 저장 방식
-                // 아이템 리스트 초기화 전에 아이템에 데이터가 있으면, 해당 리스트에 아이템이 정보와 함께 저장이 된다.
-                // 이 후, 다시 아이템을 불러올 때에 해당 리스트를 통해 불러온다.
                 List<ItemStack> itemStacks = new ArrayList<>();
 
                 for (int i = 0; i < inv.getSize(); i++) {
